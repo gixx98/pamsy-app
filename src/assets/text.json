@@ -1,0 +1,9 @@
+{
+    "authentication": {
+        "login": "Login",
+        "registration": "Registration",
+        "email": "Email",
+        "password": "Password",
+        "name": "Full Name"
+    }
+}

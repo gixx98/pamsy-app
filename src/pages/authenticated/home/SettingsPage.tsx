@@ -18,7 +18,7 @@ const SettingsPage = () => {
     <SafeAreaView style={styles.container}>
       <View>
         <TouchableOpacity style={styles.dangerButton} onPress={handleLogout}>
-          <Text style={[body.x30,{color: danger.s400}]}>Log out</Text>
+          <Text style={[body.x30,{color: '#FFF'}]}>Log out</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -35,8 +35,7 @@ const styles = StyleSheet.create({
   },
 
   dangerButton: {
-    borderColor: danger.s400,
-    borderWidth: 1,
+    backgroundColor: '#D94E4E',
     alignItems: 'center',
     textAlign: 'center',
     verticalAlign: 'middle',

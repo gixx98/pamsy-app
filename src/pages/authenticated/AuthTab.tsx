@@ -22,9 +22,14 @@ const AuthTab = () => {
     return (
         <Tab.Navigator initialRouteName='Home' screenOptions={{
             tabBarStyle: {
-                borderColor: neutral.s300,
                 paddingHorizontal: 10,
-                borderBlockColor: neutral.s100,
+                borderBlockColor: neutral.s200,
+                backgroundColor: '#FFF',
+                height: 90,
+                justifyContent: 'center'
+            },
+            tabBarItemStyle: {
+                margin: 4
             }
         }}>
             <Tab.Screen name="Home" component={HomePage} options={{

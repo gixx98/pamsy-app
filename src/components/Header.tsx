@@ -28,7 +28,7 @@ const Header = ({ onClick }: HeaderProps) => {
     }, [])
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <View style={styles.leftContainer}>
                 <Image style={styles.profilePicture} source={require('../assets/images/profilepics.jpg')} />
                 {loading ? (
@@ -42,7 +42,7 @@ const Header = ({ onClick }: HeaderProps) => {
                     <Settings width={32} height={32} color={primary.s600} />
                 </TouchableOpacity>
             </View>
-        </SafeAreaView>
+        </View>
     )
 }
 
@@ -52,8 +52,9 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         width: '100%',
-        alignItems: 'center'
-
+        alignItems: 'center',
+        marginBottom: 8,
+        paddingHorizontal: 16,
     },
 
     leftContainer: {

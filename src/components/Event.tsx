@@ -16,66 +16,84 @@ import Water from '../assets/icons/droplet.svg'
 import Trimming from '../assets/icons/scissors.svg'
 import Dental from '../assets/icons/tooth.svg'
 
-const eventCategory:any = {
-    Medication: Medicine,
-    Vaccination: Vaccination,
-    Veterinary: Vet,
-    Observation: Observation,
-    Walk: Walk,
-    Training: Training, 
-    Playtime: Game,
-    Food: Food,
-    Water: Water,
-    Bath: Water,
-    Trimming: Trimming,
-    Dental: Dental,
+const eventCategory: any = {
+	Medication: Medicine,
+	Vaccination: Vaccination,
+	Veterinary: Vet,
+	Observation: Observation,
+	Walk: Walk,
+	Training: Training,
+	Playtime: Game,
+	Food: Food,
+	Water: Water,
+	Bath: Water,
+	Trimming: Trimming,
+	Dental: Dental,
 };
 
 interface EventProps {
-    name: string
-    category: string,
-    notes: string
+	name: string
+	category: string,
+	notes: string,
+	date: Date
 }
 
 const Event = ({
-    name,
-    category,
-    notes
+	name,
+	category,
+	notes,
+	date
 }: EventProps) => {
 
-    const SelectedCategory = eventCategory[category];
-    return (
-        <View style={styles.container}>
-                <View style={styles.iconContainer}>
-                    <SelectedCategory width={32} height={32} color={primary.s600} />
-                </View>
-                <View style={styles.textContainer}>
-                    <Text style={[body.x10, { color: neutral.s500 }]}>{category}</Text>
-                    <Text style={[body.x20, { color: neutral.s800 }]}>{name}</Text>
-                </View>
-        </View>
-    )
+	const SelectedCategory = eventCategory[category];
+	return (
+		<View style={[styles.container]}>
+			<View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+				<View style={styles.iconContainer}>
+					<SelectedCategory width={32} height={32} color={primary.s600} />
+				</View>
+				<View style={styles.textContainer}>
+					<Text style={[body.x10, { fontSize: 11, color: neutral.s400, lineHeight: 16 }]}>{category}</Text>
+					<Text style={[body.x20, { color: neutral.s800, lineHeight: 20 }]}>{name}</Text>
+				</View>
+			</View>
+			<View style={styles.dateContainer}>
+				<Text style={[body.x10, { color: neutral.s800 }]}>{date.getHours() + ":" + date.getMinutes()}</Text>
+			</View>
+		</View>
+	)
 }
 
 export default Event
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#FFF',
-        flexDirection: 'row',
-        width: '100%',
-        borderRadius: 12,
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        gap: 12,
-        alignItems: 'center',
-        marginVertical:4,
-    },
-    iconContainer: {
+	container: {
+		backgroundColor: '#FFF',
+		flexDirection: 'row',
+		width: '100%',
+		borderColor: neutral.s100,
+		borderWidth: 1.5,
+		borderRadius: 12,
+		padding: 12,
+		alignItems: 'center',
+		marginVertical: 2,
+		justifyContent: 'space-between',
 
-    },
-    textContainer: {
-        gap: 2,
-        flexDirection: 'column'
-    }
+	},
+	iconContainer: {
+
+	},
+	textContainer: {
+		flexDirection: 'column'
+	},
+
+	dateContainer: {
+		borderColor: neutral.s100,
+		flexDirection: 'row',
+		borderRadius: 99,
+		borderWidth: 1,
+		paddingHorizontal: 8,
+		paddingVertical: 2
+	}
+
 })

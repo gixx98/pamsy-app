@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HealthPage from './HealthPage';
+import HealthPage from './health/HealthPage';
 import DiaryPage from './DiaryPage';
 import HomePage from './home/HomePage';
 import ProfilePage from './ProfilePage';

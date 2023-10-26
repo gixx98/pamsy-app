@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Button from '../../../components/Button'
+import Button from '../../../components/basic/Button'
 import { getAuth, signOut } from 'firebase/auth'
 import { db } from '../../../services/config'
 import { danger } from '../../../assets/style/colors'

@@ -1,16 +1,20 @@
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native'
+import React, { createContext, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigation } from '../../../App';
 import Header from '../../../components/Header';
 import { collection, onSnapshot, where } from 'firebase/firestore';
 import { auth, db } from '../../../services/config';
 import { getPetId } from '../../../services/pet';
-import Event from '../../../components/Event';
-import { body, subheader } from '../../../assets/style/typography';
+import Event from '../../../components/events/Event';
+import { body, header, subheader } from '../../../assets/style/typography';
 import { neutral } from '../../../assets/style/colors';
 import Reminders from '../../../components/Reminders';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import BoneBreakIcon from '../../../assets/icons/bone-break.svg';
+import EmptyEventsIcon from '../../../assets/icons/empty-events.svg'
+import Button from '../../../components/basic/Button';
+import { usePetContext } from '../../../context/PetContext';
 
 const mockupReminders = [
   {
@@ -55,12 +59,20 @@ const mockupReminders = [
   // Add more reminders as needed
 ];
 
+interface PetContextType {
+  petIdd: string | null;
+}
+export const PetContext = createContext<PetContextType | undefined>(undefined);
+
 const HomePage = () => {
+  const { setPetId } = usePetContext();
   const { navigate } = useNavigation<StackNavigation>();
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState([]);
-  // const [petId, setPetId] = useState('');
+  const [petIdd, setPetIdd] = useState('');
   let petId: string;
+
+  //calculating date in the following pattern: 'Tue, Oct 17'
   const today = new Date();
   const options: any = { weekday: 'short', month: 'short', day: 'numeric' };
   const formattedDate = today.toLocaleDateString('en-US', options);
@@ -70,13 +82,14 @@ const HomePage = () => {
   useEffect(() => {
     getPetId().then((data) => {
       petId = data;
+      setPetIdd(petId)
+      setPetId(petId);
     }).then(() => {
 
-      const subscriber = onSnapshot(collection(db, `users/${user.uid}/pets/${petId}/events`), (doc) => {
+      // const subscriber = onSnapshot(collection(db, `users/${user.uid}/pets/${petId}/events`), (doc) => {
+      const subscriber = onSnapshot(collection(db, `pets/${petId}/events`), (doc) => {
         const eventsArray: any = [];
         doc.forEach((doc) => {
-          console.log(doc.data())
-          console.log(doc.id)
           eventsArray.push({
             key: doc.id,
             name: doc.data().name,
@@ -92,18 +105,18 @@ const HomePage = () => {
     })
   }, [])
 
-
   const handleSettings = () => {
     navigate("Settings");
   }
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <PetContext.Provider value={{ petIdd }}>
+      <SafeAreaView style={styles.container}>
 
-      <Header onClick={handleSettings} />
+        <Header onClick={handleSettings} />
 
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewContainer}>
+        {/* <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewContainer}> */}
 
         <View style={styles.welcomeContainer}>
           <Text style={[subheader.x40, { color: neutral.s800 }]}>Today's reminders</Text>
@@ -115,22 +128,34 @@ const HomePage = () => {
         </View>
 
         <View style={styles.summaryContainer}>
-          <Text style={[subheader.x40, { color: neutral.s800 }]}>Daily summary</Text>
-
-          <FlatList
-            data={events}
-            renderItem={({ item }: any) => (
-              <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                <Event name={item.name} category={item.category} notes={item.notes} date={item.date} />
+          <Text style={[subheader.x40, { color: neutral.s800 }]}>Today's activites</Text>
+          {/* if the events array equals 0 (there is no event) show a different view */}
+          {events.length === 0 ?
+            <View style={styles.emptyEventContainer}>
+              <Image source={require('../../../assets/images/empty-events.png')} style={{ width: 102, height: 60 }} />
+              <View style={[styles.emptyEventContainer, { borderWidth: 0, gap: 0, padding: 0 }]}>
+                <Text style={[subheader.x40, { color: neutral.s800 }]}>Let's Get Started</Text>
+                <Text style={[body.x20, { color: neutral.s400 }]}>Time to track some pet activites</Text>
               </View>
-            )}
-            keyExtractor={(item: any) => item.key}
-          />
+              <Button onPress={() => navigate("CreateNew")} title='Add activity' />
+            </View>
+            :
+            <FlatList
+              data={events}
+              renderItem={({ item }: any) => (
+                <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                  <Event pet={petIdd} id={item.key} name={item.name} category={item.category} notes={item.notes} date={item.date} />
+                </View>
+              )}
+              keyExtractor={(item: any) => item.key}
+            />}
+
         </View>
 
 
-      </ScrollView>
-    </SafeAreaView>
+        {/* </ScrollView> */}
+      </SafeAreaView>
+    </PetContext.Provider>
   )
 }
 
@@ -139,6 +164,7 @@ export default HomePage
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#F3F2F7',
+    paddingHorizontal: 16
   },
 
   scrollViewContainer: {
@@ -177,4 +203,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 4,
   },
+
+  emptyEventContainer: {
+    width: '100%',
+    backgroundColor: '#FFF',
+    borderWidth: 1,
+    borderColor: neutral.s100,
+    borderRadius: 12,
+    gap: 8,
+    padding: 16,
+    alignItems: 'center'
+  }
 })

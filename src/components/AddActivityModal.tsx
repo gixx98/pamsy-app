@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import Medicine from '../assets/icons/medicine.svg'
 import Vaccination from '../assets/icons/vaccine.svg'
@@ -11,52 +11,48 @@ import Food from '../assets/icons/bone.svg'
 import Water from '../assets/icons/droplet.svg'
 import Trimming from '../assets/icons/scissors.svg'
 import Dental from '../assets/icons/tooth.svg'
+import WeightIcon from '../assets/icons/weight-scale.svg'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { body, subheader } from '../assets/style/typography'
 import { neutral, primary } from '../assets/style/colors'
 import CategorySelector from './CategorySelector'
 
 const AddActivityModal = () => {
+  const iconSize = 24;
+  const iconColor = primary.s600;
+
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container}>
+
       <View style={styles.section}>
         <Text style={[subheader.x30, { color: neutral.s800 }]}>Health</Text>
-        <View style={styles.row}>
-          <CategorySelector text='Medication' icon={<Medicine color={primary.s600} width={24} height={24} />} />
-          <CategorySelector text='Vaccination' icon={<Vaccination color={primary.s600} width={24} height={24} />} />
-        </View>
-        <View style={styles.row}>
-          <CategorySelector text='Veterinary' icon={<Vet color={primary.s600} width={24} height={24} />} />
-          <CategorySelector text='Observation' icon={<Observation color={primary.s600} width={24} height={24} />} />
-        </View>
+        <CategorySelector text='Medication' icon={<Medicine color={iconColor} width={iconSize} height={iconSize} />} />
+        <CategorySelector text='Vaccination' icon={<Vaccination color={iconColor} width={iconSize} height={iconSize} />} />
+        <CategorySelector text='Veterinary' icon={<Vet color={iconColor} width={iconSize} height={iconSize} />} />
+        <CategorySelector text='Observation' icon={<Observation color={iconColor} width={iconSize} height={iconSize} />} />
+        <CategorySelector text='Weight' icon={<WeightIcon color={iconColor} width={iconSize} height={iconSize} />} />
       </View>
 
       <View style={styles.section}>
-        <Text style={[subheader.x30, { color: neutral.s800 }]}>Excercise</Text>
-        <View style={styles.row}>
-          <CategorySelector text='Walk' icon={<Walk color={primary.s600} width={24} height={24} />} />
-          <CategorySelector text='Training' icon={<Training color={primary.s600} width={24} height={24} />} />
-          <CategorySelector text='Playtime' icon={<Game color={primary.s600} width={24} height={24} />} />
-        </View>
+        <Text style={[subheader.x30, { color: neutral.s800 }]}>Exercise</Text>
+        <CategorySelector text='Walk' icon={<Walk color={iconColor} width={iconSize} height={iconSize} />} />
+        <CategorySelector text='Training' icon={<Training color={iconColor} width={iconSize} height={iconSize} />} />
+        <CategorySelector text='Playtime' icon={<Game color={iconColor} width={iconSize} height={iconSize} />} />
       </View>
 
       <View style={styles.section}>
         <Text style={[subheader.x30, { color: neutral.s800 }]}>Diet</Text>
-        <View style={styles.row}>
-          <CategorySelector text='Food' icon={<Food color={primary.s600} width={24} height={24} />} />
-          <CategorySelector text='Water' icon={<Water color={primary.s600} width={24} height={24} />} />
-        </View>
+        <CategorySelector text='Food' icon={<Food color={iconColor} width={iconSize} height={iconSize} />} />
+        <CategorySelector text='Water' icon={<Water color={iconColor} width={iconSize} height={iconSize} />} />
       </View>
 
       <View style={styles.section}>
         <Text style={[subheader.x30, { color: neutral.s800 }]}>Grooming</Text>
-        <View style={styles.row}>
-          <CategorySelector text='Bath' icon={<Water color={primary.s600} width={24} height={24} />} />
-          <CategorySelector text='Trimming' icon={<Trimming color={primary.s600} width={24} height={24} />} />
-          <CategorySelector text='Dental' icon={<Dental color={primary.s600} width={24} height={24} />} />
-        </View>
+        <CategorySelector text='Bath' icon={<Water color={iconColor} width={iconSize} height={iconSize} />} />
+        <CategorySelector text='Trimming' icon={<Trimming color={iconColor} width={iconSize} height={iconSize} />} />
+        <CategorySelector text='Dental' icon={<Dental color={iconColor} width={iconSize} height={iconSize} />} />
       </View>
-    </SafeAreaView >
+    </ScrollView >
   )
 }
 
@@ -66,19 +62,13 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#F3F2F7',
     flex: 1,
-    width: '100%',
-    gap: 16,
+    flexDirection: 'column',
     paddingHorizontal: 16
   },
 
   section: {
-    gap: 4
-  },
-
-  row: {
-    flexDirection: 'row',
-    gap: 8,
-    width: '100%'
+    gap: 4,
+    marginBottom: 12
   },
 
   pill: {

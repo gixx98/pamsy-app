@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, Pressable, GestureResponderEvent, TouchableOpacity } from 'react-native';
-import * as color from '../assets/style/colors';
-import { subheader } from '../assets/style/typography';
+import * as color from '../../assets/style/colors';
+import { subheader } from '../../assets/style/typography';
 
 interface Button {
     onPress: any,
@@ -11,7 +11,7 @@ interface Button {
 export default function Button(props: Button) {
   const { onPress, title = 'Save' } = props;
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity disabled={!title} style={styles.button} onPress={onPress}>
       <Text style={[subheader.x30, {color: 'white'}]}>{title}</Text>
     </TouchableOpacity>
   );

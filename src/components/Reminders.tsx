@@ -49,7 +49,7 @@ const Reminders: React.FC<ReminderListProps> = ({ reminders }) => {
 
                 </TouchableOpacity>
                 <View style={{}}>
-                    <Text style={[body.x10, { fontSize: 11, lineHeight: 16, color: neutral.s400 }]}>{item.name}</Text>
+                    <Text style={[body.x10, { fontSize: 12, lineHeight: 16, color: neutral.s400 }]}>{item.name}</Text>
                     <Text style={[body.x20, { color: neutral.s800, lineHeight: 20 }]}>{item.category}</Text>
                 </View>
             </View>

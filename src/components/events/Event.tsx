@@ -40,7 +40,8 @@ interface EventProps {
 	category: string,
 	notes: string,
 	date: Date,
-	pet: string
+	pet: string | null,
+	type?: string
 }
 
 const Event = ({
@@ -49,7 +50,8 @@ const Event = ({
 	category,
 	notes,
 	date,
-	pet
+	pet,
+	type
 }: EventProps) => {
 
 	const SelectedCategory = eventCategory[category];
@@ -57,7 +59,7 @@ const Event = ({
 	const navigation: any = useNavigation();
 
 	const eventDate = date;
-	const options: any = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+	let options: any = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 	const formattedDate = eventDate.toLocaleDateString('en-US', options);
 
 	const handleEventClick = () => {
@@ -79,11 +81,21 @@ const Event = ({
 				</View>
 				<View style={styles.textContainer}>
 					<Text style={[body.x10, { fontSize: 12, color: neutral.s400, lineHeight: 16 }]}>{category}</Text>
+					{type == 'fromWeightPage' ?
+					<Text style={[body.x20, { color: neutral.s800, lineHeight: 20 }]}>{name} kg</Text>
+					
+					:
 					<Text style={[body.x20, { color: neutral.s800, lineHeight: 20 }]}>{name}</Text>
+
+				}
 				</View>
 			</View>
 			<View style={styles.dateContainer}>
-				<Text style={[body.x10, { color: neutral.s800 }]}>{date.getHours() + ":" + date.getMinutes()}</Text>
+				{type == 'fromWeightPage' ?
+					<Text style={[body.x10, { color: neutral.s800 }]}>{formattedDate}</Text>
+					:
+					<Text style={[body.x10, { color: neutral.s800 }]}>{date.getHours() + ":" + date.getMinutes()}</Text>
+				}
 			</View>
 		</TouchableOpacity>
 	)

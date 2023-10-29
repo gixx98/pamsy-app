@@ -104,6 +104,7 @@ const HomePage = () => {
       return () => subscriber();
     })
   }, [])
+  
 
   const handleSettings = () => {
     navigate("Settings");

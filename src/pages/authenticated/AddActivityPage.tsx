@@ -17,12 +17,15 @@ const AddActivityPage = ({ route, navigation }: any) => {
 
 
   const handleClick = async () => {
+    const numValue:number = +value;
+
     addEventByPetId(petId, {
       category: category,
       name: name,
-      notes: notes
+      notes: notes,
+      value: numValue
     }).then(() => {
-      navigation.navigate('Home')
+      navigation.goBack()
       Toast.show({
         type: 'success',
         text1: 'Event added',

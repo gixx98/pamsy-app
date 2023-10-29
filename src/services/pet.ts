@@ -77,21 +77,25 @@ export const getEventsByCategory = async (
   const user: any = auth.currentUser;
   let events: any = [];
   // const petsRef = collection(db, `pets/${petId}/events`);
-  const petsRef = collection(db, `pets`);
-  const q = query(petsRef, where("userId", "array-contains", user.uid));
+  const petsRef = collection(db, `pets/${petId}/events`);
 
-
-  const q2 = query(
-    q,
-    where("category", "==", categoryName)
-  );
+  const categoryEventsQuery = query(petsRef, where("category", "==", categoryName));
 
   if (user) {
-    await getDocs(q2)
+    await getDocs(categoryEventsQuery)
       .then((querySnapshot) => {
+        const events: any = [];
         querySnapshot.forEach((doc) => {
-          console.log("Pet event: " + doc.id, " => ", doc.data());
+          // console.log("Pet event: " + doc.id, " => ", doc.data());
+          events.push({
+            id: doc.id,
+            name: doc.data().name,
+            value: doc.data().value,
+            category: doc.data().category,
+            createdAt: new Date(doc.data().createdAt.seconds * 1000 + doc.data().createdAt.nanoseconds / 1e6),
+          })
         });
+        return events;
       })
       .catch((error) => {
         console.error("Error getting documents: ", error);

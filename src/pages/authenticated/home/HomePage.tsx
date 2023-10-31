@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, Image, View } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, Image, View, ActivityIndicator } from 'react-native'
 import React, { createContext, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigation } from '../../../App';
@@ -99,12 +99,13 @@ const HomePage = () => {
           });
         });
         setEvents(eventsArray);
+        setLoading(false);
       })
 
       return () => subscriber();
     })
   }, [])
-  
+
 
   const handleSettings = () => {
     navigate("Settings");
@@ -131,7 +132,8 @@ const HomePage = () => {
         <View style={styles.summaryContainer}>
           <Text style={[subheader.x40, { color: neutral.s800 }]}>Today's activites</Text>
           {/* if the events array equals 0 (there is no event) show a different view */}
-          {events.length === 0 ?
+          {loading && <ActivityIndicator size={"small"} color={'#0000ff'} />}
+          {loading == false && events.length === 0 ?
             <View style={styles.emptyEventContainer}>
               <Image source={require('../../../assets/images/empty-events.png')} style={{ width: 102, height: 60 }} />
               <View style={[styles.emptyEventContainer, { borderWidth: 0, gap: 0, padding: 0 }]}>

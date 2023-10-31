@@ -7,6 +7,7 @@ import { db } from '../../../services/config';
 import Event from '../../../components/events/Event';
 import { subheader } from '../../../assets/style/typography';
 import { neutral } from '../../../assets/style/colors';
+import Button from '../../../components/basic/Button';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -93,6 +94,12 @@ const WeightPage = ({ route, navigation }: any) => {
     console.log("Updated dates:", dates);
   }, [dates]);
 
+  const handleClick = () => {
+    navigation.navigate("AddActivityPage", {
+      category: "Weight"
+  });
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.chartContainer}>
@@ -106,7 +113,7 @@ const WeightPage = ({ route, navigation }: any) => {
       </View>
       <Text style={[subheader.x40, { color: neutral.s800 }]}>Logged weights</Text>
       {weightEvents ? <FlatList
-        data={weightEvents}
+        data={weightEvents.reverse()}
         renderItem={({ item }: any) => (
           <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
             <Event id={item.key} name={item.value} category='Weight' date={item.date} pet={petId} notes='' type='fromWeightPage' />
@@ -115,6 +122,7 @@ const WeightPage = ({ route, navigation }: any) => {
         keyExtractor={(item: any) => item?.key}
       /> : <Text>Loading:</Text>
       }
+      <Button title='Add weight' onPress={handleClick} />
 
     </View>
   )

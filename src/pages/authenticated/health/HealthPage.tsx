@@ -4,6 +4,7 @@ import { neutral, primary } from '../../../assets/style/colors'
 import WeightIcon from '../../../assets/icons/weight-scale.svg'
 import RightArrowIcon from '../../../assets/icons/angle-right.svg'
 import EyeIcon from '../../../assets/icons/eye.svg'
+import StethoscopeIcon from '../../../assets/icons/stethoscope.svg'
 import { body, subheader } from '../../../assets/style/typography'
 import { usePetContext } from '../../../context/PetContext'
 import { collection, onSnapshot, query, where } from 'firebase/firestore'
@@ -19,17 +20,27 @@ const HealthPage = ({ navigation, params }: any) => {
 					<View style={styles.entryContainer}>
 						<View style={styles.entryLeftContainer}>
 							<WeightIcon width={24} color={primary.s600} />
-							<Text style={[subheader.x20, { color: neutral.s800 }]}>Weight</Text>
+							<Text style={[body.x20, { color: neutral.s800 }]}>Weight</Text>
 						</View>
 						<RightArrowIcon color={primary.s600} />
 					</View>
 				</TouchableOpacity>
 
-				<TouchableOpacity>
-					<View style={[styles.entryContainer, { borderBottomWidth: 0 }]}>
+				<TouchableOpacity onPress={() => navigation.navigate("Observations")}>
+					<View style={[styles.entryContainer, { borderBottomWidth: 1 }]}>
 						<View style={styles.entryLeftContainer}>
 							<EyeIcon width={24} color={primary.s600} />
-							<Text style={[subheader.x20, { color: neutral.s800 }]}>Observations</Text>
+							<Text style={[body.x20, { color: neutral.s800 }]}>Observations</Text>
+						</View>
+						<RightArrowIcon color={primary.s600} />
+					</View>
+				</TouchableOpacity>
+
+				<TouchableOpacity onPress={() => navigation.navigate("VetAppointments")}>
+					<View style={[styles.entryContainer, { borderBottomWidth: 0 }]}>
+						<View style={styles.entryLeftContainer}>
+							<StethoscopeIcon width={24} color={primary.s600} />
+							<Text style={[body.x20, { color: neutral.s800 }]}>Vet appointments</Text>
 						</View>
 						<RightArrowIcon color={primary.s600} />
 					</View>
@@ -44,6 +55,7 @@ export default HealthPage
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#F3F2F7',
+		height: '100%'
 	},
 
 	navigationContainer: {
@@ -53,14 +65,17 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: neutral.s100,
 		margin: 16,
-		gap: 8
+		gap: 8,
+		paddingVertical: 8
 	},
 
 	entryContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
+		alignContent: 'center',
 		justifyContent: 'space-between',
-		paddingVertical: 12,
+		paddingTop: 8,
+		paddingBottom: 12,
 		paddingHorizontal: 16,
 		borderBottomWidth: 1,
 		borderColor: neutral.s100

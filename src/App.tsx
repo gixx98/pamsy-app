@@ -19,8 +19,13 @@ import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 import Button from './components/basic/Button';
 import WeightPage from './pages/authenticated/health/WeightPage';
 import { PetProvider } from './context/PetContext';
+import VetAppointmentPage from './pages/authenticated/health/VetAppointmentPage';
+import ObservationPage from './pages/authenticated/health/ObservationPage';
+import AddObservationModal from './components/AddObservationModal';
+import ObservationDetails from './pages/authenticated/health/ObservationDetails';
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
-export type ScreenNames = ["Login", "Registration", "AuthTab", "EditEvent", "Settings", "CreateNew", "AddActivityPage", "Weight"]
+export type ScreenNames = ["Login", "Registration", "AuthTab", "EditEvent", "Settings", "CreateNew", "AddActivityPage", "Weight", "Observations", "VetAppointments", "AddObservation", "ObservationDetails"]
 export type RootStackParamList = Record<ScreenNames[number], undefined>;
 export type StackNavigation = NavigationProp<RootStackParamList>;
 
@@ -106,44 +111,59 @@ export default function App() {
   };
 
   return (
-    <NavigationContainer>
-      <PetProvider>
-        <Stack.Navigator initialRouteName='Login'>
-          {user ? (
-            <Stack.Group>
-              <Stack.Screen name="AuthTab" component={AuthTab} options={{
-                headerShown: false
-              }} />
-              <Stack.Group screenOptions={{
-                presentation: 'modal'
-              }}>
-                <Stack.Screen name='CreateNew' component={CreateNew} options={{
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <PetProvider>
+          <Stack.Navigator initialRouteName='Login'>
+            {user ? (
+              <Stack.Group>
+                <Stack.Screen name="AuthTab" component={AuthTab} options={{
+                  headerShown: false
+                }} />
+                <Stack.Group screenOptions={{
+                  presentation: 'modal'
+                }}>
+                  <Stack.Screen name='CreateNew' component={CreateNew} options={{
+                    title: 'Add activity'
+                  }} />
+                  <Stack.Screen name='AddObservation' component={AddObservationModal} options={{
+                    title: 'New collection'
+                  }} />
+                </Stack.Group>
+                <Stack.Screen name='Settings' component={SettingsPage} />
+                <Stack.Screen name='EditEvent' component={EventDetailsPage} options={{
+                  headerShown: false
+                }} />
+                <Stack.Screen name='AddActivityPage' component={AddActivityPage} options={{
                   title: 'Add activity'
                 }} />
+                <Stack.Screen name='Weight' component={WeightPage} options={{
+                  title: 'Weight'
+                }} />
+                <Stack.Screen name='Observations' component={ObservationPage} options={{
+                  title: 'Observations'
+                }} />
+                <Stack.Screen name='ObservationDetails' component={ObservationDetails} options={{
+                  title: 'Observations Details'
+                }} />
+                <Stack.Screen name='VetAppointments' component={VetAppointmentPage} options={{
+                  title: 'Weight'
+                }} />
               </Stack.Group>
-              <Stack.Screen name='Settings' component={SettingsPage} />
-              <Stack.Screen name='EditEvent' component={EventDetailsPage} options={{
-                headerShown: false
-              }} />
-              <Stack.Screen name='AddActivityPage' component={AddActivityPage} options={{
-                title: 'Add activity'
-              }} />
-              <Stack.Screen name='Weight' component={WeightPage} options={{
-                title: 'Weight'
-              }} />
-            </Stack.Group>
-          ) : (
-            <Stack.Group>
-              <Stack.Screen name="Login" component={LoginPage} options={{
-                title: 'Log in with email'
-              }} />
-              <Stack.Screen name="Registration" component={RegistrationPage} />
-            </Stack.Group>
-          )}
-        </Stack.Navigator>
-        <Toast />
-      </PetProvider>
-    </NavigationContainer>
+            ) : (
+              <Stack.Group>
+                <Stack.Screen name="Login" component={LoginPage} options={{
+                  title: 'Log in with email'
+                }} />
+                <Stack.Screen name="Registration" component={RegistrationPage} />
+              </Stack.Group>
+            )}
+          </Stack.Navigator>
+          <Toast />
+        </PetProvider>
+      </NavigationContainer>
+    </GestureHandlerRootView>
+
   );
 }
 

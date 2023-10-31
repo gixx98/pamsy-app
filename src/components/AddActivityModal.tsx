@@ -4,6 +4,7 @@ import Medicine from '../assets/icons/medicine.svg'
 import Vaccination from '../assets/icons/vaccine.svg'
 import Observation from '../assets/icons/symptoms.svg'
 import Vet from '../assets/icons/vet.svg'
+import Stethoscope from '../assets/icons/stethoscope.svg'
 import Walk from '../assets/icons/shoes-running.svg'
 import Game from '../assets/icons/puzzle.svg'
 import Training from '../assets/icons/target.svg'
@@ -28,7 +29,7 @@ const AddActivityModal = () => {
         <Text style={[subheader.x30, { color: neutral.s800 }]}>Health</Text>
         <CategorySelector text='Medication' icon={<Medicine color={iconColor} width={iconSize} height={iconSize} />} />
         <CategorySelector text='Vaccination' icon={<Vaccination color={iconColor} width={iconSize} height={iconSize} />} />
-        <CategorySelector text='Veterinary' icon={<Vet color={iconColor} width={iconSize} height={iconSize} />} />
+        <CategorySelector text='Vet appointment' icon={<Stethoscope color={iconColor} width={iconSize} height={iconSize} />} />
         <CategorySelector text='Observation' icon={<Observation color={iconColor} width={iconSize} height={iconSize} />} />
         <CategorySelector text='Weight' icon={<WeightIcon color={iconColor} width={iconSize} height={iconSize} />} />
       </View>

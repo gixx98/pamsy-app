@@ -144,7 +144,8 @@ export default function App() {
                   title: 'Observations'
                 }} />
                 <Stack.Screen name='ObservationDetails' component={ObservationDetails} options={{
-                  title: 'Observations Details'
+                  title: 'Observation',
+                  headerBackTitleVisible: false
                 }} />
                 <Stack.Screen name='VetAppointments' component={VetAppointmentPage} options={{
                   title: 'Weight'

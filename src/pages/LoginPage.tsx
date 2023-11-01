@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, TouchableOpacity, ActivityIndicator, SafeAreaView, Touchable } from 'react-native';
 import React, { useState } from 'react';
 import { header, subheader, body } from '../assets/style/typography';
 import text from "../assets/text.json";
@@ -8,7 +8,9 @@ import * as size from '../assets/style/sizing';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../services/config';
 import { useNavigation } from '@react-navigation/native';
-import { primary } from '../assets/style/colors';
+import { neutral, primary } from '../assets/style/colors';
+import EmailLoginIcon from '../assets/icons/email_login.svg';
+import BackIcon from '../assets/icons/angle-left.svg';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -32,39 +34,59 @@ const LoginPage = () => {
   }
 
   function handleRegisterPage(): void {
-    navigation.navigate("Registration")
+    // navigation.navigate("Registration")
+    console.log("Forgot password")
   }
 
+  function handleBackPress() {
+    navigation.goBack();
+  }
+
+  const isButtonDisabled = !email || !password;
+
   return (
-    <KeyboardAvoidingView behavior='padding' style={styles.container}>
-      <Text style={[body.x20]}>{text.authentication.email}</Text>
-      <TextInput
-        value={email}
-        autoCapitalize="none"
-        placeholder='Enter your email'
-        style={styles.input}
-        onChangeText={(text) => setEmail(text)} />
-      <Text style={[body.x20, {marginTop: 4}]}>{text.authentication.password}</Text>
-      <TextInput
-        value={password}
-        autoCapitalize="none"
-        secureTextEntry
-        placeholder='Enter your password'
-        style={styles.input}
-        onChangeText={(text) => setPassword(text)} />
-      <TouchableOpacity style={[styles.input, {backgroundColor: color.primary.s600, alignItems: 'center', justifyContent: 'center', marginTop: 12}]} onPress={handleLogin}>
-        {loading ? (
-          <ActivityIndicator size={"small"} color={'#FFF'} />
-        ) : (
-          <Text style={[subheader.x30, {color: '#FFF'}]}>Sign in</Text>
-        )}
-      </TouchableOpacity>
+    // <KeyboardAvoidingView behavior='padding' style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={handleBackPress}>
+            <BackIcon width={24} height={24} />
+          </TouchableOpacity>
+        </View>
+        <EmailLoginIcon />
+        <Text style={[subheader.x40, { color: neutral.s800 }]}>Continue with email</Text>
 
-      <TouchableOpacity onPress={handleRegisterPage}>
-        <Text>Register</Text>
-      </TouchableOpacity>
+        <View>
+          {/* <Text style={[body.x20]}>{text.authentication.email}</Text> */}
+          <TextInput
+            value={email}
+            autoCapitalize="none"
+            placeholder='Enter your email'
+            style={styles.input}
+            onChangeText={(text) => setEmail(text)} />
+        </View>
+        <View>
+          {/* <Text style={[body.x20, { marginTop: 4 }]}>{text.authentication.password}</Text> */}
+          <TextInput
+            value={password}
+            autoCapitalize="none"
+            secureTextEntry
+            placeholder='Enter your password'
+            style={styles.input}
+            onChangeText={(text) => setPassword(text)} />
+        </View>
+        <TouchableOpacity disabled={isButtonDisabled} style={[styles.button, isButtonDisabled && styles.disabledButton]} onPress={handleLogin}>
+          {loading ? (
+            <ActivityIndicator size={"small"} color={'#FFF'} />
+          ) : (
+            <Text style={[subheader.x30, { color: '#FFF' }]}>Sign in</Text>
+          )}
+        </TouchableOpacity>
 
-    </KeyboardAvoidingView>
+        <TouchableOpacity onPress={handleRegisterPage}>
+          <Text style={[subheader.x20, { color: '#1D4ED8' }]}>Forgot password?</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    // </KeyboardAvoidingView>
   )
 }
 
@@ -72,16 +94,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F3F2F7',
-    gap: 4,
-    paddingHorizontal: 16,
+    gap: 10,
+    marginHorizontal: 16,
     paddingVertical: 8
   },
+
+  header: {
+    width: '100%',
+    marginBottom: 8
+  },
+
   input: {
     padding: 8,
     width: "100%",
     borderRadius: 8,
     height: 44,
     backgroundColor: color.neutral.white
+  },
+
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: 44,
+    borderRadius: 12,
+    elevation: 3,
+    backgroundColor: color.primary.s600,
+  },
+
+  disabledButton: {
+    opacity: 0.4
   }
 })
 

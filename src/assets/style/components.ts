@@ -5,18 +5,18 @@ export const componentStyle = StyleSheet.create({
   textInput: {
     width: "100%",
     borderRadius: 12,
-    paddingVertical: 12,
+    paddingVertical: 16,
     borderColor: neutral.s100,
     backgroundColor: neutral.white, 
     paddingHorizontal: 12,
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0.5,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
-    elevation: 2,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 0.5,
+    // },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 1,
+    // elevation: 2,
     ...Platform.select({
         ios: {
             lineHeight: 18
@@ -33,14 +33,14 @@ export const componentStyle = StyleSheet.create({
     borderColor: neutral.s100,
     backgroundColor: neutral.white, 
     paddingHorizontal: 12,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0.5,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
-    elevation: 2,
+    // shadowColor: "#000",
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 0.5,
+    // },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 1,
+    // elevation: 2,
     ...Platform.select({
         ios: {
             lineHeight: 16

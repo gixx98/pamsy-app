@@ -51,26 +51,15 @@ const AddObservationModal = ({ navigation, route }: any) => {
 
   return (
     <View style={styles.container}>
-
       <View style={styles.inputSection}>
         <Text style={[subheader.x10, { color: neutral.s800 }]}>Title</Text>
         <TextInput
-          placeholder='Enter a title'
+          placeholder='Enter title'
           value={title}
           style={componentStyle.textInput}
           onChangeText={setTitle} />
       </View>
-      {/* <View style={styles.inputSection}>
-        <Text style={[subheader.x10, { color: neutral.s800 }]}>Symptoms started at</Text>
-        <RNDateTimePicker
-          value={selectedDate}
-          mode="date"
-          display="default"
-          onChange={handleDateChange}
-        />
-        <Text>{selectedDate.toDateString()}</Text>
-      </View> */}
-      <Button title="Create collection" onPress={handleNewClick}></Button>
+      <Button title="Create collection" onPress={handleNewClick} disabled={!title}></Button>
       <View style={[{ flexDirection: 'row', gap: 8, width: '100%', alignItems: 'center' }]}>
         <InfoIcon color={neutral.s500} width={24} height={24} />
         <Text style={[body.x10, { color: neutral.s500, flexShrink: 1 }]}>After you created this collection of observations, you can add your observations to it whenever they occur.</Text>

@@ -55,6 +55,8 @@ const AddActivityPage = ({ route, navigation }: any) => {
     } 
   }, [])
 
+  const isButtonDisabled = !name;
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={[styles.container, { marginHorizontal: 0 }]} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -99,7 +101,7 @@ const AddActivityPage = ({ route, navigation }: any) => {
 
         </View>
         <View style={{}}>
-          <Button onPress={handleClick} title='Add activity' />
+          <Button onPress={handleClick} title='Add activity' disabled={isButtonDisabled} />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

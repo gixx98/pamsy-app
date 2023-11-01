@@ -37,11 +37,10 @@ const styles = StyleSheet.create({
   dangerButton: {
     backgroundColor: '#D94E4E',
     alignItems: 'center',
-    textAlign: 'center',
+    justifyContent: 'center',
     verticalAlign: 'middle',
-    paddingVertical: 8,
+    height: 44,
     borderRadius: 12,
     minHeight: 28,
-    maxHeight: 48
   }
 })

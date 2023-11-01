@@ -24,8 +24,15 @@ import ObservationPage from './pages/authenticated/health/ObservationPage';
 import AddObservationModal from './components/AddObservationModal';
 import ObservationDetails from './pages/authenticated/health/ObservationDetails';
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import OnboardingPage from './pages/OnboardingPage';
+import FirstPage from './pages/onboarding/FirstPage';
+import SecondPage from './pages/onboarding/SecondPage';
+import ThirdPage from './pages/onboarding/ThirdPage';
+import FourthPage from './pages/onboarding/FourthPage';
+import FifthPage from './pages/onboarding/FifthPage';
+import SixthPage from './pages/onboarding/SixthPage';
 
-export type ScreenNames = ["Login", "Registration", "AuthTab", "EditEvent", "Settings", "CreateNew", "AddActivityPage", "Weight", "Observations", "VetAppointments", "AddObservation", "ObservationDetails"]
+export type ScreenNames = ["Onboarding", "FirstStep", "SecondStep", "ThirdStep", "FourthStep", "FifthStep", "SixthStep", "Login", "Registration", "AuthTab", "EditEvent", "Settings", "CreateNew", "AddActivityPage", "Weight", "Observations", "VetAppointments", "AddObservation", "ObservationDetails"]
 export type RootStackParamList = Record<ScreenNames[number], undefined>;
 export type StackNavigation = NavigationProp<RootStackParamList>;
 
@@ -114,7 +121,7 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer>
         <PetProvider>
-          <Stack.Navigator initialRouteName='Login'>
+          <Stack.Navigator initialRouteName='Onboarding'>
             {user ? (
               <Stack.Group>
                 <Stack.Screen name="AuthTab" component={AuthTab} options={{
@@ -127,7 +134,7 @@ export default function App() {
                     title: 'Add activity'
                   }} />
                   <Stack.Screen name='AddObservation' component={AddObservationModal} options={{
-                    title: 'New collection'
+                    title: 'New collection',
                   }} />
                 </Stack.Group>
                 <Stack.Screen name='Settings' component={SettingsPage} />
@@ -138,25 +145,51 @@ export default function App() {
                   title: 'Add activity'
                 }} />
                 <Stack.Screen name='Weight' component={WeightPage} options={{
-                  title: 'Weight'
+                  title: 'Weight',
+                  headerBackTitleVisible: false
                 }} />
                 <Stack.Screen name='Observations' component={ObservationPage} options={{
-                  title: 'Observations'
+                  title: 'Observations',
+                  headerBackTitleVisible: false
                 }} />
                 <Stack.Screen name='ObservationDetails' component={ObservationDetails} options={{
                   title: 'Observation',
                   headerBackTitleVisible: false
                 }} />
                 <Stack.Screen name='VetAppointments' component={VetAppointmentPage} options={{
-                  title: 'Weight'
+                  title: 'Weight',
+                  headerBackTitleVisible: false
                 }} />
               </Stack.Group>
             ) : (
               <Stack.Group>
+                <Stack.Screen name="Onboarding" component={OnboardingPage} options={{
+                  headerShown: false
+                }} />
                 <Stack.Screen name="Login" component={LoginPage} options={{
-                  title: 'Log in with email'
+                  headerShown: false,
+                  title: 'Sign in with email'
                 }} />
                 <Stack.Screen name="Registration" component={RegistrationPage} />
+
+                <Stack.Screen name="FirstStep" component={FirstPage} options={{
+                  headerShown: false
+                }} />
+                <Stack.Screen name="SecondStep" component={SecondPage} options={{
+                  headerShown: false
+                }} />
+                <Stack.Screen name="ThirdStep" component={ThirdPage} options={{
+                  headerShown: false
+                }} />
+                <Stack.Screen name="FourthStep" component={FourthPage} options={{
+                  headerShown: false
+                }} />
+                <Stack.Screen name="FifthStep" component={FifthPage} options={{
+                  headerShown: false
+                }} />
+                <Stack.Screen name="SixthStep" component={SixthPage} options={{
+                  headerShown: false
+                }} />
               </Stack.Group>
             )}
           </Stack.Navigator>
@@ -176,7 +209,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-function createContext() {
-  throw new Error('Function not implemented.');
-}
-

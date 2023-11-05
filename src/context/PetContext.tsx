@@ -7,14 +7,14 @@ type ContextProps = {
 };
 
 interface PetContextType {
-    petId: string | null;
-    setPetId: React.Dispatch<React.SetStateAction<string | null>>;
+    petId: string;
+    setPetId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const PetContext = createContext<PetContextType | undefined>(undefined);
 
 const PetProvider = (props: ContextProps) => {
-    const [petId, setPetId] = useState<string | null>(null);
+    const [petId, setPetId] = useState<string>('');
 
     return (
         <PetContext.Provider value={{ petId, setPetId }}>

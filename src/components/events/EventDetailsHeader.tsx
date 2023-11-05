@@ -7,16 +7,17 @@ import { useNavigation } from '@react-navigation/native'
 import { danger, neutral, primary } from '../../assets/style/colors'
 import { deleteEventByEventId } from '../../services/pet'
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
+import { usePetContext } from '../../context/PetContext'
 
 interface EventDetailsHeaderProps {
     eventId: string,
     eventName: string,
-    petId: string 
 }
 
-const EventDetailsHeader = ({ eventId, eventName, petId }: EventDetailsHeaderProps) => {
+const EventDetailsHeader = ({ eventId, eventName }: EventDetailsHeaderProps) => {
 
     const navigation: any = useNavigation();
+  const { petId } = usePetContext();
 
     const handleBackPress = () => {
         navigation.goBack();

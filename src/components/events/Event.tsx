@@ -50,7 +50,6 @@ const Event = ({
 	category,
 	notes,
 	date,
-	pet,
 	type
 }: EventProps) => {
 
@@ -64,7 +63,6 @@ const Event = ({
 
 	const handleEventClick = () => {
 		navigation.navigate("EditEvent", {
-			petId: pet,
 			id: id,
 			name: name,
 			category: category,
@@ -73,8 +71,11 @@ const Event = ({
 			icon: SelectedCategory
 		})
 	}
+
+	const widthRatio = type === 'fromDiary' ? '83%' : '100%';
+
 	return (
-		<TouchableOpacity onPress={handleEventClick} style={[styles.container]}>
+		<TouchableOpacity onPress={handleEventClick} style={[styles.container, {width: widthRatio}]}>
 			<View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
 				<View style={styles.iconContainer}>
 					<SelectedCategory width={24} height={24} color={primary.s600} />
@@ -107,14 +108,13 @@ const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#FFF',
 		flexDirection: 'row',
-		width: '100%',
 		borderColor: neutral.s100,
 		borderWidth: 1.5,
 		borderRadius: 12,
 		paddingHorizontal: 16,
 		paddingVertical: 12,
 		alignItems: 'center',
-		marginVertical: 2,
+		marginBottom: 4,
 		justifyContent: 'space-between',
 
 	},

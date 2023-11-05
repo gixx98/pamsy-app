@@ -15,7 +15,7 @@ const EventDetailsPage = ({ route, navigation }: any) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <EventDetailsHeader eventId={props.id} eventName={props.name} petId={props.petId} />
+            <EventDetailsHeader eventId={props.id} eventName={props.name} />
 
             <View style={[styles.detailsContainer,{ gap: 12, paddingHorizontal: 16, marginBottom: 12 }]}>
                 <Text style={[header.x40, { color: neutral.s800 }]}>{props.name}</Text>

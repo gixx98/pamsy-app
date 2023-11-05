@@ -11,6 +11,7 @@ import NoteTextIcon from '../../../assets/icons/note-text.svg';
 const EventDetailsPage = ({ route, navigation }: any) => {
     const props = route.params;
     const Icon = props.icon;
+    
 
     return (
         <SafeAreaView style={styles.container}>

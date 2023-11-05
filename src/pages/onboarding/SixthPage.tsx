@@ -10,7 +10,8 @@ import { auth, db } from '../../services/config';
 import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 import { signup } from '../../services/auth';
 
-const SixthPage = ({ navigation, route }: any) => {
+const SixthPage: React.FunctionComponent = ({ navigation, route }: any) => {
+    const [loading, setLoading] = useState(false);
     const [password, setPassword] = useState('');
 
     const { name, species, gender, birthday, email } = route.params;
@@ -22,6 +23,7 @@ const SixthPage = ({ navigation, route }: any) => {
     }
 
     const handleRegistration = async () => {
+        setLoading(true)
         try {
             const user = await signup(email, password);
             const userRef = doc(db, 'users', user.uid);
@@ -40,8 +42,11 @@ const SixthPage = ({ navigation, route }: any) => {
             }
             await addDoc(petRef, petData);
 
-
-
+            navigation.navigate("VerStep", {
+                email: email,
+                password: password
+            });
+            setLoading(false)
         } catch (error: any) {
             alert(error);
             throw error;
@@ -63,7 +68,7 @@ const SixthPage = ({ navigation, route }: any) => {
                         style={componentStyle.textInput}
                         onChangeText={setPassword} />
                 </View>
-                <Button title='Create account and start!' onPress={handleRegistration} />
+                <Button title='Create account' onPress={handleRegistration} />
 
             </SafeAreaView>
         </KeyboardAvoidingView>

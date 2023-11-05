@@ -4,7 +4,7 @@ import { neutral } from "./colors";
 export const componentStyle = StyleSheet.create({
   textInput: {
     width: "100%",
-    borderRadius: 12,
+    borderRadius: 16,
     paddingVertical: 16,
     borderColor: neutral.s100,
     backgroundColor: neutral.white, 

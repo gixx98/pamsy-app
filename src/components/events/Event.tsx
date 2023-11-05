@@ -35,12 +35,12 @@ const eventCategory: any = {
 };
 
 interface EventProps {
-	id: string,
+	id: string | null,
 	name: string
 	category: string,
 	notes: string,
 	date: Date,
-	pet: string | null,
+	pet?: string | null,
 	type?: string
 }
 

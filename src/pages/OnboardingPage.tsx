@@ -23,7 +23,7 @@ const OnboardingPage = ({ navigation, route }: any) => {
                     <Text style={[body.x30, { color: neutral.s400, textAlign: 'center' }]}>Track your pet's life, health and more!</Text>
                 </View>
             </View>
-            <View style={{ paddingHorizontal: 16, marginBottom: 16, gap: 8 }}>
+            <View style={{ paddingHorizontal: 16, gap: 4 }}>
                 <Button title='Get Started' onPress={handleSignUp} />
                 <TouchableOpacity style={styles.secondaryButton} onPress={handleSignIn}>
                     <Text style={[subheader.x30, { color: primary.s600, textAlign: 'center' }]}>Sign in</Text>
@@ -51,12 +51,11 @@ const styles = StyleSheet.create({
     },
 
     secondaryButton: {
-        borderWidth: 1,
         borderColor: primary.s600,
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
         height: 44,
-        borderRadius: 12
+        borderRadius: 18
     }
 })

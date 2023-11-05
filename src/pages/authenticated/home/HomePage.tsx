@@ -3,7 +3,7 @@ import React, { createContext, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigation } from '../../../App';
 import Header from '../../../components/Header';
-import { collection, onSnapshot, where } from 'firebase/firestore';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { auth, db } from '../../../services/config';
 import { getPetId } from '../../../services/pet';
 import Event from '../../../components/events/Event';
@@ -15,6 +15,7 @@ import BoneBreakIcon from '../../../assets/icons/bone-break.svg';
 import EmptyEventsIcon from '../../../assets/icons/empty-events.svg'
 import Button from '../../../components/basic/Button';
 import { usePetContext } from '../../../context/PetContext';
+import { endOfDay, startOfDay } from 'date-fns';
 
 const mockupReminders = [
   {
@@ -79,6 +80,10 @@ const HomePage = () => {
 
   const user: any = auth.currentUser;
 
+  const todayQuery = new Date();
+  const startOfToday = startOfDay(todayQuery);
+  const endOfToday = endOfDay(todayQuery);
+
   useEffect(() => {
     getPetId().then((data) => {
       petId = data;
@@ -87,7 +92,7 @@ const HomePage = () => {
     }).then(() => {
 
       // const subscriber = onSnapshot(collection(db, `users/${user.uid}/pets/${petId}/events`), (doc) => {
-      const subscriber = onSnapshot(collection(db, `pets/${petId}/events`), (doc) => {
+      const subscriber = onSnapshot(query(collection(db, `pets/${petId}/events`), where("createdAt", ">=", startOfToday), where("createdAt", "<=", endOfToday)), (doc) => {
         const eventsArray: any = [];
         doc.forEach((doc) => {
           eventsArray.push({

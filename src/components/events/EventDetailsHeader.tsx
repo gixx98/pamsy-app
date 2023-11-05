@@ -11,7 +11,7 @@ import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 interface EventDetailsHeaderProps {
     eventId: string,
     eventName: string,
-    petId: string
+    petId: string 
 }
 
 const EventDetailsHeader = ({ eventId, eventName, petId }: EventDetailsHeaderProps) => {
@@ -39,7 +39,6 @@ const EventDetailsHeader = ({ eventId, eventName, petId }: EventDetailsHeaderPro
 
         
     const handleDeletePress = async () => {
-        //implement pet deletion by event id
         
         await deleteEventByEventId(petId, eventId)
             .then(() => {

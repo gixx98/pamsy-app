@@ -16,7 +16,6 @@ import AddActivityPage from './pages/authenticated/AddActivityPage';
 import EditEventPage from './pages/authenticated/home/EventDetailsPage';
 import EventDetailsPage from './pages/authenticated/home/EventDetailsPage';
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
-import Button from './components/basic/Button';
 import WeightPage from './pages/authenticated/health/WeightPage';
 import { PetProvider } from './context/PetContext';
 import VetAppointmentPage from './pages/authenticated/health/VetAppointmentPage';
@@ -31,8 +30,9 @@ import ThirdPage from './pages/onboarding/ThirdPage';
 import FourthPage from './pages/onboarding/FourthPage';
 import FifthPage from './pages/onboarding/FifthPage';
 import SixthPage from './pages/onboarding/SixthPage';
+import VerPage from './pages/onboarding/VerPage';
 
-export type ScreenNames = ["Onboarding", "FirstStep", "SecondStep", "ThirdStep", "FourthStep", "FifthStep", "SixthStep", "Login", "Registration", "AuthTab", "EditEvent", "Settings", "CreateNew", "AddActivityPage", "Weight", "Observations", "VetAppointments", "AddObservation", "ObservationDetails"]
+export type ScreenNames = ["Onboarding", "FirstStep", "SecondStep", "ThirdStep", "FourthStep", "FifthStep", "SixthStep", "VerStep", "Login", "Registration", "AuthTab", "EditEvent", "Settings", "CreateNew", "AddActivityPage", "Weight", "Observations", "VetAppointments", "AddObservation", "ObservationDetails"]
 export type RootStackParamList = Record<ScreenNames[number], undefined>;
 export type StackNavigation = NavigationProp<RootStackParamList>;
 
@@ -52,6 +52,7 @@ export default function App() {
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
   const onAuthStateChangedHandler = (user: User | null) => {
+
     setUser(user);
     if (initializing) {
       setInitializing(false);
@@ -117,6 +118,7 @@ export default function App() {
     )
   };
 
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer>
@@ -124,9 +126,11 @@ export default function App() {
           <Stack.Navigator initialRouteName='Onboarding'>
             {user ? (
               <Stack.Group>
+
                 <Stack.Screen name="AuthTab" component={AuthTab} options={{
                   headerShown: false
                 }} />
+
                 <Stack.Group screenOptions={{
                   presentation: 'modal'
                 }}>
@@ -190,6 +194,11 @@ export default function App() {
                 <Stack.Screen name="SixthStep" component={SixthPage} options={{
                   headerShown: false
                 }} />
+                <Stack.Screen name="VerStep" component={VerPage} options={{
+                  headerShown: false
+                }} />
+
+
               </Stack.Group>
             )}
           </Stack.Navigator>
@@ -204,7 +213,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF',
     alignItems: 'center',
     justifyContent: 'center',
   },

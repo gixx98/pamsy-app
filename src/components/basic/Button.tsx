@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 44,
     paddingHorizontal: 32,
-    borderRadius: 12,
+    borderRadius: 16,
     elevation: 3,
     marginTop: 12,
     backgroundColor: color.primary.s600,

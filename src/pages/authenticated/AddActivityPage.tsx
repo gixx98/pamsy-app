@@ -82,7 +82,7 @@ const AddActivityPage = ({ route, navigation }: any) => {
                 value={value}
                 style={componentStyle.textInput}
                 onChangeText={setValue}
-                keyboardType={Platform.OS == 'android' ? "numeric" : "number-pad"} />
+                keyboardType={Platform.OS == 'android' ? "numeric" : "decimal-pad"} />
 
             </View>
             :

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TextInput, KeyboardAvoidingView, TouchableOpacity, ActivityIndicator, SafeAreaView, Touchable } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { header, subheader, body } from '../assets/style/typography';
 import text from "../assets/text.json";
 import Button from '../components/basic/Button';
@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import { neutral, primary } from '../assets/style/colors';
 import EmailLoginIcon from '../assets/icons/email_login.svg';
 import BackIcon from '../assets/icons/angle-left.svg';
+import SimpleHeader from '../components/basic/SimpleHeader';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -39,7 +40,7 @@ const LoginPage = () => {
   }
 
   function handleBackPress() {
-    navigation.goBack();
+    navigation.navigate("Onboarding");
   }
 
   const isButtonDisabled = !email || !password;
@@ -47,11 +48,7 @@ const LoginPage = () => {
   return (
     // <KeyboardAvoidingView behavior='padding' style={styles.container}>
       <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={handleBackPress}>
-            <BackIcon width={24} height={24} />
-          </TouchableOpacity>
-        </View>
+        <SimpleHeader onButtonPress={handleBackPress} />
         <EmailLoginIcon />
         <Text style={[subheader.x40, { color: neutral.s800 }]}>Continue with email</Text>
 
@@ -61,6 +58,9 @@ const LoginPage = () => {
             value={email}
             autoCapitalize="none"
             placeholder='Enter your email'
+            keyboardType="email-address"
+            textContentType='oneTimeCode'
+            autoCorrect={false}
             style={styles.input}
             onChangeText={(text) => setEmail(text)} />
         </View>

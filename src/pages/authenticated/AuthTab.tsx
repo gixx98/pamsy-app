@@ -68,6 +68,7 @@ const AuthTab = () => {
             <Tab.Screen name="Diary" component={DiaryPage} options={{
                 tabBarActiveTintColor: primary.s600,
                 tabBarInactiveTintColor: neutral.s300,
+                headerShown: false,
                 tabBarIcon: ({ focused }) => (
                     focused ? <DiaryFilled color={primary.s600} /> : <Diary color={neutral.s300} />
                 ),
@@ -75,6 +76,8 @@ const AuthTab = () => {
             <Tab.Screen name="Profile" component={ProfilePage} options={{
                 tabBarActiveTintColor: primary.s600,
                 tabBarInactiveTintColor: neutral.s300,
+                headerShown: false,
+
                 tabBarIcon: ({ focused }) => (
                     focused ? <UserFilled color={primary.s600} /> : <User color={neutral.s300} />
                 ),

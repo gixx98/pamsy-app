@@ -73,9 +73,10 @@ const Event = ({
 	}
 
 	const widthRatio = type === 'fromDiary' ? '83%' : '100%';
+	const style = type === 'fromDiary' ? styles.diaryStyle : styles.container;
 
 	return (
-		<TouchableOpacity onPress={handleEventClick} style={[styles.container, {width: widthRatio}]}>
+		<TouchableOpacity onPress={handleEventClick} style={[style, { width: widthRatio }]}>
 			<View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
 				<View style={styles.iconContainer}>
 					<SelectedCategory width={24} height={24} color={primary.s600} />
@@ -83,12 +84,12 @@ const Event = ({
 				<View style={styles.textContainer}>
 					<Text style={[body.x10, { fontSize: 12, color: neutral.s400, lineHeight: 16 }]}>{category}</Text>
 					{type == 'fromWeightPage' ?
-					<Text style={[body.x20, { color: neutral.s800, lineHeight: 20 }]}>{name} kg</Text>
-					
-					:
-					<Text style={[body.x20, { color: neutral.s800, lineHeight: 20 }]}>{name}</Text>
+						<Text style={[body.x20, { color: neutral.s800, lineHeight: 20 }]}>{name} kg</Text>
 
-				}
+						:
+						<Text style={[body.x20, { color: neutral.s800, lineHeight: 20 }]}>{name}</Text>
+
+					}
 				</View>
 			</View>
 			<View style={styles.dateContainer}>
@@ -108,18 +109,25 @@ const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#FFF',
 		flexDirection: 'row',
-		borderColor: neutral.s100,
-		borderWidth: 1.5,
-		borderRadius: 12,
+		// borderColor: neutral.s100,
+		// borderWidth: 1.5,
+		borderRadius: 18,
 		paddingHorizontal: 16,
 		paddingVertical: 12,
 		alignItems: 'center',
-		marginBottom: 4,
+		marginBottom: 8,
 		justifyContent: 'space-between',
 
 	},
 	iconContainer: {
-
+		backgroundColor: '#FAFAFA',
+		width: 44,
+		height: 44,
+		justifyContent: 'center',
+		alignItems: 'center',
+		borderRadius: 8,
+		borderColor: neutral.s100,
+        borderWidth: 0.5,
 	},
 	textContainer: {
 		flexDirection: 'column'
@@ -132,6 +140,19 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		paddingHorizontal: 8,
 		paddingVertical: 2
+	},
+
+	diaryStyle: {
+		backgroundColor: '#FFF',
+		flexDirection: 'row',
+		paddingVertical: 4,
+		alignItems: 'center',
+		marginBottom: 8,
+		paddingRight: 16,
+		justifyContent: 'space-between',
+		borderColor: neutral.s100,
+		// borderWidth: 1.5,
+		borderRadius: 18,
 	}
 
 })

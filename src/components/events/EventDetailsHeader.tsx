@@ -59,11 +59,11 @@ const EventDetailsHeader = ({ eventId, eventName }: EventDetailsHeaderProps) => 
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={() => handleBackPress()}>
-                <BackIcon color={primary.s600} width={32} height={32} />
+                <BackIcon color={primary.s600} width={24} height={24} />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => createTwoButtonAlert()}>
-                <TrashIcon color={danger.s400} width={32} height={32} />
+                <TrashIcon color={danger.s400} width={24} height={24} />
             </TouchableOpacity>
         </View>
     )

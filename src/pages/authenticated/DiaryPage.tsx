@@ -13,6 +13,8 @@ import { body, subheader } from '../../assets/style/typography';
 import { Dimensions } from "react-native";
 import BackIcon from '../../assets/icons/angle-left.svg';
 import ForwardIcon from '../../assets/icons/angle-right.svg';
+import SearchIcon from '../../assets/icons/search.svg';
+
 
 const width = Dimensions.get('window').width;
 
@@ -24,11 +26,13 @@ const DiaryPage = () => {
   const [filteredEvents, setFilteredEvents] = useState<unknown[]>([]); // Events after applying filter and search
   const { petId } = usePetContext();
   const [modalVisible, setModalVisible] = useState(false);
+  const [dates, setDates] = useState<Date[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(() => {
     const subscriber = onSnapshot(collection(db, `pets/${petId}/events`), (doc) => {
+      setLoading(true);
       const eventsArray: any = [];
       doc.forEach((doc) => {
         eventsArray.push({
@@ -39,16 +43,22 @@ const DiaryPage = () => {
           notes: doc.data().notes,
         });
       });
+
       setEvents(eventsArray);
+
+      filterEvents();
+      setDates(generateDates());
       setLoading(false);
-    })
+    });
 
     return () => subscriber();
   }, [])
 
   useEffect(() => {
     filterEvents();
-  }, [filter, searchTerm, selectedDate]);
+    setDates(generateDates());
+
+  }, [filter, searchTerm, selectedDate, events]);
 
 
   const filterEvents = () => {
@@ -71,12 +81,10 @@ const DiaryPage = () => {
 
   const handleBack = () => {
     setSelectedDate(prevDate => addMonths(prevDate, -1));
-    filterEvents();
   };
 
   const handleForward = () => {
     setSelectedDate(prevDate => addMonths(prevDate, 1));
-    filterEvents();
   };
 
   const generateDates = () => {
@@ -93,7 +101,26 @@ const DiaryPage = () => {
     return [];
   };
 
-  const dates = generateDates();
+  // const dates = generateDates();
+
+  const combinedData = dates.map(date => {
+    const eventsForDate = filteredEvents.filter((event: any) => format(event.createdAt, 'dd/MM/yyyy') === format(date, 'dd/MM/yyyy'));
+    if (eventsForDate.length > 0) {
+      return {
+        date,
+        events: eventsForDate
+      };
+    } else {
+      return {
+        date
+      };
+    }
+  });
+
+  const onRefresh = async () => {
+    filterEvents();
+    setDates(generateDates());
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -109,38 +136,40 @@ const DiaryPage = () => {
         <TouchableOpacity onPress={handleBack}>
           <BackIcon color={primary.s600} />
         </TouchableOpacity>
-        <Text style={[subheader.x10, {color: neutral.s600}]}>{selectedDate.toLocaleString('en-EN', { month: 'long' }) }</Text>
+        <Text style={[subheader.x30, { color: neutral.s600 }]}>{selectedDate.toLocaleString('en-EN', { month: 'long' })}</Text>
         <TouchableOpacity onPress={handleForward}>
           <ForwardIcon color={primary.s600} />
         </TouchableOpacity>
       </View>
-      <TextInput
-        placeholder="Search events"
-        value={searchTerm}
-        onChangeText={(text) => setSearchTerm(text)}
-        style={[componentStyle.textInput, { marginVertical: 8 }]}
-      />
+
+      <View style={styles.searchSection}>
+        <SearchIcon width={24} height={24} />
+        <TextInput
+          placeholder="Search events"
+          value={searchTerm}
+          onChangeText={(text) => setSearchTerm(text)}
+          style={[styles.input]}
+        />
+      </View>
 
       {loading ? <ActivityIndicator /> :
         <FlatList
-          data={dates}
-          keyExtractor={(date) => date.toString()}
+          data={combinedData}
+          keyExtractor={(item) => item.date.toString()}
+          onRefresh={() => onRefresh()}
+          refreshing={loading}
           renderItem={({ item }: any) => (
-            <View style={{ flexDirection: 'row', flex: 1, gap: 8 }}>
-              <ShortDateView date={format(item, 'dd MMM EEE')} />
-              <View style={{ width: '100%', borderBottomColor: neutral.s200, justifyContent: 'center' }}>
-                {filteredEvents
-                  .filter((event: any) => format(event.createdAt, 'dd/MM/yyyy') === format(item, 'dd/MM/yyyy'))
-                  .map((event: any) => (
-                    <View key={event.key} style={{ width: '100%' }} >
-                      <Event id={event.key} name={event.name} category={event.category} date={event.createdAt} notes={event.notes} type='fromDiary' />
-                    </View>
-                  ))}
-                {filteredEvents
-                  .filter((event: any) => format(event.createdAt, 'dd/MM/yyyy') === format(item, 'dd/MM/yyyy'))
-                  .length === 0 && (
-                    <Text style={[body.x20, { color: neutral.s300, justifyContent: 'center' }]}>No events for this date</Text>
-                  )}
+            <View style={styles.combinedDataContainer}>
+              <ShortDateView date={format(item.date, 'dd MMM EEE')} />
+              <View style={{ width: '100%', justifyContent: 'center' }}>
+                {item.events && item.events.map((event: any) => (
+                  <View key={event.key} style={{ width: '100%' }} >
+                    <Event id={event.key} name={event.name} category={event.category} date={event.createdAt} notes={event.notes} type='fromDiary' />
+                  </View>
+                ))}
+                {!item.events && (
+                  <Text style={[body.x20, { color: neutral.s300, justifyContent: 'center', marginLeft: 4 }]}>No events for this date</Text>
+                )}
               </View>
             </View>
           )}
@@ -169,7 +198,38 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 40
-  }
+    height: 40,
+    paddingHorizontal: 16
+  },
+
+  combinedDataContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#FFF',
+    gap: 16,
+    marginBottom: 12,
+    flex: 1,
+    padding: 8
+  },
+
+  searchSection: {
+
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    borderRadius: 18,
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    paddingHorizontal: 16,
+    marginVertical: 12,
+    marginHorizontal: 16
+  },
+
+  input: {
+    paddingTop: 16,
+    paddingRight: 10,
+    paddingBottom: 16,
+    paddingLeft: 10,
+    backgroundColor: '#fff',
+    color: '#424242',
+  },
 
 })

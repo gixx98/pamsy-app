@@ -152,7 +152,7 @@ const HomePage = () => {
             <FlatList
               data={events}
               renderItem={({ item }: any) => (
-                <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                <View style={{ alignItems: 'center', justifyContent: 'center', gap: 12 }}>
                   <Event id={item.key} name={item.name} category={item.category} notes={item.notes} date={item.date} />
                 </View>
               )}

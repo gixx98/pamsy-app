@@ -14,10 +14,12 @@ const AddActivityPage = ({ route, navigation }: any) => {
   const [value, setValue] = useState('');
   const [notes, setNotes] = useState('');
   const [petId, setPetId] = useState('');
+  const [loading, setLoading] = useState(false);
 
 
   const handleClick = async () => {
-    const numValue:number = +value;
+    setLoading(true);
+    const numValue: number = +value;
 
     addEventByPetId(petId, {
       category: category,
@@ -34,6 +36,7 @@ const AddActivityPage = ({ route, navigation }: any) => {
         topOffset: 100
       });
     });
+    setLoading(false);
   }
 
 
@@ -50,9 +53,9 @@ const AddActivityPage = ({ route, navigation }: any) => {
 
 
   useEffect((): any => {
-    if(category == 'Weight'){
+    if (category == 'Weight') {
       setName('Logged weight')
-    } 
+    }
   }, [])
 
   const isButtonDisabled = !name;
@@ -101,7 +104,7 @@ const AddActivityPage = ({ route, navigation }: any) => {
 
         </View>
         <View style={{}}>
-          <Button onPress={handleClick} title='Add activity' disabled={isButtonDisabled} />
+          <Button onPress={handleClick} title='Add activity' loading={loading} disabled={isButtonDisabled} />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>

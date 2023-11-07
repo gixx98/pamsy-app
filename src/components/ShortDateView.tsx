@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { neutral } from '../assets/style/colors';
+import { danger, neutral, primary } from '../assets/style/colors';
 import { body, subheader } from '../assets/style/typography';
 
 interface ShortDateViewProps {
@@ -12,7 +12,7 @@ const ShortDateView = (props: ShortDateViewProps) => {
     return (
         <View style={styles.container}>
             <View style={styles.monthContainer}>
-                <Text style={[ subheader.x10, {color: neutral.s400, textAlign: 'center'}]}>{date.substring(3, 6)}</Text>
+                <Text style={[ subheader.x10, {color: neutral.white, textAlign: 'center'}]}>{date.substring(3, 6)}</Text>
 
             </View>
             <Text style={[subheader.x30, {color: neutral.s600}]}>{date.substring(0, 2)}</Text>
@@ -27,21 +27,22 @@ export default ShortDateView
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#F9F9F9',
         alignSelf: 'flex-start',
         borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
         width: '15%',
-        gap: 4,
-        marginBottom: 8,
+        borderColor: neutral.s100,
+        borderWidth: 0.5,
         padding: 4,
+        marginVertical: 4
     },
 
     monthContainer: {
         borderTopLeftRadius: 8,
         borderTopRightRadius: 8,
-        backgroundColor: neutral.s100,
+        backgroundColor: primary.s600,
         width: '100%',
         alignSelf: 'center'
     },

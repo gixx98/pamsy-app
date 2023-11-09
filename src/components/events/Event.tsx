@@ -16,22 +16,25 @@ import Water from '../../assets/icons/droplet.svg'
 import Trimming from '../../assets/icons/scissors.svg'
 import Dental from '../../assets/icons/tooth.svg'
 import Weight from '../../assets/icons/weight-scale.svg'
+import Stethoscope from '../../assets/icons/stethoscope.svg'
 import { useNavigation } from '@react-navigation/native'
+import { format } from 'date-fns'
 
 const eventCategory: any = {
-	Medication: Medicine,
-	Vaccination: Vaccination,
-	Veterinary: Vet,
-	Observation: Observation,
-	Walk: Walk,
-	Training: Training,
-	Playtime: Game,
-	Food: Food,
-	Water: Water,
-	Bath: Water,
-	Trimming: Trimming,
-	Dental: Dental,
-	Weight: Weight
+	'Medication': Medicine,
+	'Vaccination': Vaccination,
+	'Veterinary': Vet,
+	'Observation': Observation,
+	'Walk': Walk,
+	'Training': Training,
+	'Playtime': Game,
+	'Food': Food,
+	'Water': Water,
+	'Bath': Water,
+	'Trimming': Trimming,
+	'Vet appointment': Stethoscope,
+	'Dental': Dental,
+	'Weight': Weight
 };
 
 interface EventProps {
@@ -40,6 +43,8 @@ interface EventProps {
 	category: string,
 	notes: string,
 	date: Date,
+	value?: number,
+	unitOfMeasure?: string,
 	pet?: string | null,
 	type?: string
 }
@@ -49,6 +54,8 @@ const Event = ({
 	name,
 	category,
 	notes,
+	value,
+	unitOfMeasure,
 	date,
 	type
 }: EventProps) => {
@@ -56,7 +63,7 @@ const Event = ({
 	const SelectedCategory = eventCategory[category];
 
 	const navigation: any = useNavigation();
-
+	const formattedEventDate = format(date, 'kk:mm');
 	const eventDate = date;
 	let options: any = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 	const formattedDate = eventDate.toLocaleDateString('en-US', options);
@@ -72,13 +79,16 @@ const Event = ({
 		})
 	}
 
+
 	const widthRatio = type === 'fromDiary' ? '83%' : '100%';
 	const style = type === 'fromDiary' ? styles.diaryStyle : styles.container;
+	const iconStyle = type === 'fromDiary' ? styles.diaryIcon : styles.eventIcon;
+	const visibleName = category === 'Walk' || category === 'Playtime' || category === 'Training' ? `${value?.toString()} ${unitOfMeasure?.toLowerCase()}` : name
 
 	return (
 		<TouchableOpacity onPress={handleEventClick} style={[style, { width: widthRatio }]}>
 			<View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-				<View style={styles.iconContainer}>
+				<View style={iconStyle}>
 					<SelectedCategory width={24} height={24} color={primary.s600} />
 				</View>
 				<View style={styles.textContainer}>
@@ -87,7 +97,7 @@ const Event = ({
 						<Text style={[body.x20, { color: neutral.s800, lineHeight: 20 }]}>{name} kg</Text>
 
 						:
-						<Text style={[body.x20, { color: neutral.s800, lineHeight: 20 }]}>{name}</Text>
+						<Text style={[body.x20, { color: neutral.s800, lineHeight: 20 }]}>{visibleName}</Text>
 
 					}
 				</View>
@@ -96,7 +106,7 @@ const Event = ({
 				{type == 'fromWeightPage' ?
 					<Text style={[body.x10, { color: neutral.s800 }]}>{formattedDate}</Text>
 					:
-					<Text style={[body.x10, { color: neutral.s800 }]}>{date.getHours() + ":" + date.getMinutes()}</Text>
+					<Text style={[body.x10, { color: neutral.s800 }]}>{formattedEventDate}</Text>
 				}
 			</View>
 		</TouchableOpacity>
@@ -109,9 +119,9 @@ const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#FFF',
 		flexDirection: 'row',
-		// borderColor: neutral.s100,
-		// borderWidth: 1.5,
-		borderRadius: 18,
+		borderColor: neutral.s100,
+		borderWidth: 1,
+		borderRadius: 12,
 		paddingHorizontal: 16,
 		paddingVertical: 12,
 		alignItems: 'center',
@@ -119,7 +129,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 
 	},
-	iconContainer: {
+	diaryIcon: {
 		backgroundColor: '#FAFAFA',
 		width: 44,
 		height: 44,
@@ -127,8 +137,17 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		borderRadius: 8,
 		borderColor: neutral.s100,
-        borderWidth: 0.5,
+		borderWidth: 0.5,
 	},
+
+	eventIcon: {
+		width: 32,
+		height: 32,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+
+
 	textContainer: {
 		flexDirection: 'column'
 	},
@@ -152,7 +171,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		borderColor: neutral.s100,
 		// borderWidth: 1.5,
-		borderRadius: 18,
+		borderRadius: 12,
 	}
 
 })

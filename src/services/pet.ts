@@ -49,18 +49,49 @@ export const getPetId = async (): Promise<string> => {
   return id;
 };
 
-export const addEventByPetId = async (petId: string, event: any) => {
-  const user: any = auth.currentUser;
+interface Event {
+  category: string;
+  name: string;
+  createdAt?: Date;
+  notes: string;
+  value?: number;
+  unitOfMeasure?: string,
+  dosage?: number;
+  dateOfEvent?: Date;
+}
 
-  if (user) {
-    await addDoc(collection(db, `pets/${petId}/events`), {
-      category: event.category,
-      name: event.name,
-      notes: event.notes,
-      createdAt: new Date(),
-      value: event.value,
-    });
+export const addEventByPetId = async (petId: string, event: Event) => {
+  const eventData: Event = {
+    category: event.category,
+    name: event.name,
+    notes: event.notes,
+    createdAt: new Date(),
   }
+
+  if(event.category == 'Medication'){
+    eventData.dosage = event.dosage;
+  }else if(event.category == 'Vaccination'){
+
+  }else if(event.category == 'Vet appointment'){
+    
+  }else if(event.category == 'Observation'){
+    
+  }else if(event.category == 'Weight'){
+    eventData.value = event.value;
+    eventData.unitOfMeasure = event.unitOfMeasure;
+  }else if(event.category == 'Walk' || event.category == 'Training' || event.category == 'Playtime'){
+    eventData.value = event.value;
+    eventData.unitOfMeasure = event.unitOfMeasure;
+  }
+  
+  await addDoc(collection(db, `pets/${petId}/events`), {
+    category: event.category,
+    name: event.name,
+    notes: event.notes,
+    createdAt: new Date(),
+    unitOfMeasure: event.unitOfMeasure,
+    value: event.value,
+  });
 };
 
 export const deleteEventByEventId = async (petId: string, eventId: string) => {
@@ -79,7 +110,10 @@ export const getEventsByCategory = async (
   // const petsRef = collection(db, `pets/${petId}/events`);
   const petsRef = collection(db, `pets/${petId}/events`);
 
-  const categoryEventsQuery = query(petsRef, where("category", "==", categoryName));
+  const categoryEventsQuery = query(
+    petsRef,
+    where("category", "==", categoryName)
+  );
 
   if (user) {
     await getDocs(categoryEventsQuery)
@@ -92,8 +126,11 @@ export const getEventsByCategory = async (
             name: doc.data().name,
             value: doc.data().value,
             category: doc.data().category,
-            createdAt: new Date(doc.data().createdAt.seconds * 1000 + doc.data().createdAt.nanoseconds / 1e6),
-          })
+            createdAt: new Date(
+              doc.data().createdAt.seconds * 1000 +
+                doc.data().createdAt.nanoseconds / 1e6
+            ),
+          });
         });
         return events;
       })

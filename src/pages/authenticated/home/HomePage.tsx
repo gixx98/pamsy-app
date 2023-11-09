@@ -3,7 +3,7 @@ import React, { createContext, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigation } from '../../../App';
 import Header from '../../../components/Header';
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { auth, db } from '../../../services/config';
 import { getPetId } from '../../../services/pet';
 import Event from '../../../components/events/Event';
@@ -65,7 +65,7 @@ interface PetContextType {
 }
 export const PetContext = createContext<PetContextType | undefined>(undefined);
 
-const HomePage = () => {
+const HomePage = ({ navigation, route }: any) => {
   const { setPetId } = usePetContext();
   const { navigate } = useNavigation<StackNavigation>();
   const [loading, setLoading] = useState(true);
@@ -93,13 +93,15 @@ const HomePage = () => {
     }).then(() => {
 
       // const subscriber = onSnapshot(collection(db, `users/${user.uid}/pets/${petId}/events`), (doc) => {
-      const subscriber = onSnapshot(query(collection(db, `pets/${petId}/events`), where("createdAt", ">=", startOfToday), where("createdAt", "<=", endOfToday)), (doc) => {
+      const subscriber = onSnapshot(query(collection(db, `pets/${petId}/events`), where("createdAt", ">=", startOfToday), where("createdAt", "<=", endOfToday), orderBy("createdAt", 'desc')), (doc) => {
         const eventsArray: any = [];
         doc.forEach((doc) => {
           eventsArray.push({
             key: doc.id,
             name: doc.data().name,
             category: doc.data().category,
+            value: doc.data().value,
+            unitOfMeasure: doc.data().unitOfMeasure,
             date: new Date(doc.data().createdAt.seconds * 1000 + doc.data().createdAt.nanoseconds / 1e6),
             notes: doc.data().notes,
           });
@@ -112,57 +114,50 @@ const HomePage = () => {
     })
   }, [])
 
-
-  const handleSettings = () => {
-    navigate("Settings");
-  }
-
-
   return (
     <PetContext.Provider value={{ petIdd }}>
       <SafeAreaView style={styles.container}>
-
-        <Header onClick={handleSettings} />
+        <Header navigation={navigation} />
 
         {/* <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewContainer}> */}
 
         <View style={styles.welcomeContainer}>
-          <Text style={[subheader.x40, { color: neutral.s800 }]}>Today's reminders</Text>
-          <Text style={[body.x30, { color: neutral.s400 }]}>{formattedDate}</Text>
+          <Text style={[subheader.x30, { color: neutral.s600 }]}>Reminders</Text>
         </View>
 
         <View style={[styles.reminderContainer]}>
           <Reminders reminders={mockupReminders} />
         </View>
 
-        <View style={styles.summaryContainer}>
-          <Text style={[subheader.x40, { color: neutral.s800 }]}>Today's activites</Text>
-          {/* if the events array equals 0 (there is no event) show a different view */}
-          {loading && <ActivityIndicator size={"small"} color={'#0000ff'} />}
-          {loading == false && events.length === 0 ?
-            <View style={styles.emptyEventContainer}>
-              <Image source={require('../../../assets/images/empty-events.png')} style={{ width: 102, height: 60 }} />
-              <View style={[styles.emptyEventContainer, { borderWidth: 0, gap: 0, padding: 0 }]}>
-                <Text style={[subheader.x40, { color: neutral.s800 }]}>Let's Get Started</Text>
-                <Text style={[body.x20, { color: neutral.s400 }]}>Time to track some pet activites</Text>
-              </View>
-              <Button onPress={() => navigate("CreateNew")} title='Add activity' />
-            </View>
-            :
-            <FlatList
-              data={events}
-              renderItem={({ item }: any) => (
-                <View style={{ alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-                  <Event id={item.key} name={item.name} category={item.category} notes={item.notes} date={item.date} />
-                </View>
-              )}
-              keyExtractor={(item: any) => item.key}
-            />}
-
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <Text style={[subheader.x30, { color: neutral.s600 }]}>Today</Text>
+          <Text style={[body.x20, { color: neutral.s400 }]}>{formattedDate}</Text>
         </View>
 
 
-        {/* </ScrollView> */}
+        {/* if the events array equals 0 (there is no event) show a different view */}
+        {loading && <ActivityIndicator size={"small"} color={'#0000ff'} />}
+        {loading == false && events.length === 0 ?
+          <View style={styles.emptyEventContainer}>
+            <Image source={require('../../../assets/images/empty-events.png')} style={{ width: 102, height: 60 }} />
+            <View style={[styles.emptyEventContainer, { borderWidth: 0, gap: 0, padding: 0 }]}>
+              <Text style={[subheader.x40, { color: neutral.s600 }]}>Let's Get Started</Text>
+              <Text style={[body.x20, { color: neutral.s400 }]}>Time to track some pet activites</Text>
+            </View>
+            <Button onPress={() => navigate("CreateNew")} title='Add activity' />
+          </View>
+          :
+          <FlatList
+            data={events}
+            renderItem={({ item }: any) => (
+              <View style={{ alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+                <Event id={item.key} name={item.name} category={item.category} notes={item.notes} date={item.date} value={item.value} unitOfMeasure={item.unitOfMeasure} />
+              </View>
+            )}
+            style={{height: '100%'}}
+            keyExtractor={(item: any) => item.key}
+          />}
+
       </SafeAreaView>
     </PetContext.Provider>
   )
@@ -173,22 +168,17 @@ export default HomePage
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#F3F2F7',
-    paddingHorizontal: 16
-  },
-
-  scrollViewContainer: {
-    gap: 16,
-    flexDirection: 'column',
     paddingHorizontal: 16,
-
+    height: '100%'
   },
 
   welcomeContainer: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
-    alignItems: 'center'
+    marginBottom: 4,
+    alignItems: 'center',
+
   },
 
   reminderContainer: {
@@ -202,8 +192,8 @@ const styles = StyleSheet.create({
   },
 
   summaryContainer: {
-    height: '100%',
-    gap: 8
+    gap: 8,
+    flex: 1,
   },
 
   shadowProp: {

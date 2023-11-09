@@ -23,7 +23,7 @@ const FirstPage = ({ navigation, route }: any) => {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} >
             <SafeAreaView style={styles.container}>
-                <SimpleHeader onButtonPress={handleBackPress} />
+                <SimpleHeader name='' onButtonPress={handleBackPress} />
 
                 <View style={styles.center}>
                     <Text style={[header.x50, {color:neutral.s800}]}>First, can you tell us your pet's name?</Text>

@@ -27,7 +27,7 @@ const FifthPage = ({ navigation, route }: any) => {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} >
             <SafeAreaView style={styles.container}>
-                <SimpleHeader onButtonPress={handleBackPress} />
+                <SimpleHeader name='' onButtonPress={handleBackPress} />
                 <View style={{gap: 8}}>
                     <Text style={[body.x30, { color: neutral.s500 }]}>Awesome, you are almost there!</Text>
                     <Text style={[header.x40, { color: neutral.s800 }]}>In order to save your account, I'm going to ask for your email, which will be registered.</Text>

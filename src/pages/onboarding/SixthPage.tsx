@@ -56,7 +56,7 @@ const SixthPage: React.FunctionComponent = ({ navigation, route }: any) => {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} >
             <SafeAreaView style={styles.container}>
-                <SimpleHeader onButtonPress={handleBackPress} />
+                <SimpleHeader name='' onButtonPress={handleBackPress} />
                 <View style={{ gap: 8 }}>
                     <Text style={[body.x30, { color: neutral.s500 }]}>One more step!</Text>
                     <Text style={[header.x40, { color: neutral.s800 }]}>Create a password which will be used to log in to this account!</Text>

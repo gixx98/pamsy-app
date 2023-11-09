@@ -3,7 +3,7 @@
 import React, { createContext, useState, useContext } from 'react';
 
 type ContextProps = {
-    children: React.ReactNode; // 👈️ define children prop
+    children: React.ReactNode;
 };
 
 interface PetContextType {

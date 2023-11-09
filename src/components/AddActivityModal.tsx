@@ -26,7 +26,7 @@ const AddActivityModal = () => {
     <ScrollView style={styles.container}>
 
       <View style={styles.section}>
-        <Text style={[subheader.x30, { color: neutral.s800 }]}>Health</Text>
+        <Text style={[subheader.x20, { color: neutral.s800 }]}>Health</Text>
         <CategorySelector text='Medication' icon={<Medicine color={iconColor} width={iconSize} height={iconSize} />} />
         <CategorySelector text='Vaccination' icon={<Vaccination color={iconColor} width={iconSize} height={iconSize} />} />
         <CategorySelector text='Vet appointment' icon={<Stethoscope color={iconColor} width={iconSize} height={iconSize} />} />
@@ -35,20 +35,20 @@ const AddActivityModal = () => {
       </View>
 
       <View style={styles.section}>
-        <Text style={[subheader.x30, { color: neutral.s800 }]}>Exercise</Text>
+        <Text style={[subheader.x20, { color: neutral.s800 }]}>Exercise</Text>
         <CategorySelector text='Walk' icon={<Walk color={iconColor} width={iconSize} height={iconSize} />} />
         <CategorySelector text='Training' icon={<Training color={iconColor} width={iconSize} height={iconSize} />} />
         <CategorySelector text='Playtime' icon={<Game color={iconColor} width={iconSize} height={iconSize} />} />
       </View>
 
       <View style={styles.section}>
-        <Text style={[subheader.x30, { color: neutral.s800 }]}>Diet</Text>
+        <Text style={[subheader.x20, { color: neutral.s800 }]}>Diet</Text>
         <CategorySelector text='Food' icon={<Food color={iconColor} width={iconSize} height={iconSize} />} />
         <CategorySelector text='Water' icon={<Water color={iconColor} width={iconSize} height={iconSize} />} />
       </View>
 
       <View style={styles.section}>
-        <Text style={[subheader.x30, { color: neutral.s800 }]}>Grooming</Text>
+        <Text style={[subheader.x20, { color: neutral.s800 }]}>Grooming</Text>
         <CategorySelector text='Bath' icon={<Water color={iconColor} width={iconSize} height={iconSize} />} />
         <CategorySelector text='Trimming' icon={<Trimming color={iconColor} width={iconSize} height={iconSize} />} />
         <CategorySelector text='Dental' icon={<Dental color={iconColor} width={iconSize} height={iconSize} />} />

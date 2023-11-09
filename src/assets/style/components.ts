@@ -1,11 +1,11 @@
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StatusBar, StyleSheet } from "react-native";
 import { neutral } from "./colors";
 
 export const componentStyle = StyleSheet.create({
   textInput: {
     width: "100%",
     borderRadius: 16,
-    paddingVertical: 16,
+    paddingVertical: 14,
     borderColor: neutral.s100,
     backgroundColor: neutral.white, 
     paddingHorizontal: 12,
@@ -47,5 +47,11 @@ export const componentStyle = StyleSheet.create({
         },
         android: {}
     })
-  }
+  },
+
+    AndroidSafeArea: {
+      flex: 1,
+      backgroundColor: "white",
+      paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+    }
 });

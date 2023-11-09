@@ -15,6 +15,7 @@ import HeartFilled from '../../assets/icons/heart_fill.svg'
 import User from '../../assets/icons/user.svg'
 import UserFilled from '../../assets/icons/user_filled.svg'
 import { neutral, primary } from '../../assets/style/colors';
+import * as Haptics from 'expo-haptics';
 
 const AuthTab = () => {
     const CreateNewPlaceholder = () => <View style={{ flex: 1, backgroundColor: '#FFF' }} />
@@ -22,26 +23,36 @@ const AuthTab = () => {
     return (
         <Tab.Navigator initialRouteName='Home' screenOptions={{
             tabBarStyle: {
-                paddingHorizontal: 10,
                 borderBlockColor: neutral.s200,
                 backgroundColor: '#FFF',
                 height: 90,
-                justifyContent: 'center'
+                justifyContent: 'center',
             },
             tabBarItemStyle: {
-                margin: 4
-            }
+                margin: 4,
+                marginBottom: 10
+            },
         }}>
-            <Tab.Screen name="Home" component={HomePage} options={{
-                title: 'Home',
-                tabBarActiveTintColor: primary.s600,
-                tabBarInactiveTintColor: neutral.s300,
-                tabBarIcon: ({ focused }) => (
-                    focused ? <HomeFilled color={primary.s600} /> : <Home color={neutral.s300} />
-                ),
-                headerShown: false
-            }} />
-            <Tab.Screen name="Health" component={HealthPage}
+            <Tab.Screen name="Home" component={HomePage} listeners={() => ({
+                tabPress: () => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                }
+            })}
+                options={{
+                    title: 'Home',
+                    tabBarActiveTintColor: primary.s600,
+                    tabBarInactiveTintColor: neutral.s300,
+                    tabBarIcon: ({ focused }) => (
+                        focused ? <HomeFilled color={primary.s600} /> : <Home color={neutral.s300} />
+                    ),
+                    headerShown: false,
+
+                }} />
+            <Tab.Screen name="Health" component={HealthPage} listeners={() => ({
+                tabPress: () => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                }
+            })}
                 options={{
                     tabBarActiveTintColor: primary.s600,
                     tabBarInactiveTintColor: neutral.s300,
@@ -52,6 +63,7 @@ const AuthTab = () => {
             <Tab.Screen name="Plus" component={CreateNewPlaceholder}
                 listeners={({ navigation }) => ({
                     tabPress: event => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
                         event.preventDefault();
                         navigation.navigate("CreateNew");
                     }
@@ -65,23 +77,33 @@ const AuthTab = () => {
                     tabBarInactiveTintColor: neutral.s300,
                     tabBarIcon: () => <PlusBig color={primary.s600} height={44} width={44} />
                 }} />
-            <Tab.Screen name="Diary" component={DiaryPage} options={{
-                tabBarActiveTintColor: primary.s600,
-                tabBarInactiveTintColor: neutral.s300,
-                headerShown: false,
-                tabBarIcon: ({ focused }) => (
-                    focused ? <DiaryFilled color={primary.s600} /> : <Diary color={neutral.s300} />
-                ),
-            }} />
-            <Tab.Screen name="Profile" component={ProfilePage} options={{
-                tabBarActiveTintColor: primary.s600,
-                tabBarInactiveTintColor: neutral.s300,
-                headerShown: false,
-
-                tabBarIcon: ({ focused }) => (
-                    focused ? <UserFilled color={primary.s600} /> : <User color={neutral.s300} />
-                ),
-            }} />
+            <Tab.Screen name="Diary" component={DiaryPage} listeners={() => ({
+                tabPress: () => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                }
+            })}
+                options={{
+                    tabBarActiveTintColor: primary.s600,
+                    tabBarInactiveTintColor: neutral.s300,
+                    headerShown: false,
+                    tabBarLabel: 'Events',
+                    tabBarIcon: ({ focused }) => (
+                        focused ? <DiaryFilled color={primary.s600} /> : <Diary color={neutral.s300} />
+                    ),
+                }} />
+            <Tab.Screen name="Profile" component={ProfilePage} listeners={() => ({
+                tabPress: () => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+                }
+            })}
+                options={{
+                    tabBarActiveTintColor: primary.s600,
+                    tabBarInactiveTintColor: neutral.s300,
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => (
+                        focused ? <UserFilled color={primary.s600} /> : <User color={neutral.s300} />
+                    ),
+                }} />
         </Tab.Navigator>
     )
 }

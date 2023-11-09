@@ -5,6 +5,7 @@ import { db } from '../../services/config';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { neutral, primary } from '../../assets/style/colors';
 import { body, header, subheader } from '../../assets/style/typography';
+import { componentStyle } from '../../assets/style/components';
 
 interface IPet {
   name: string,
@@ -16,16 +17,16 @@ interface IPet {
 const ProfilePage = () => {
   const { petId } = usePetContext();
   const [pet, setPet] = useState<IPet>({ name: "", gender: "", species: "", birthDay: new Date() });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const subscriber = onSnapshot(doc(db, `pets/${petId}`), (doc: any) => {
-      console.log(doc.data())
       setPet({
         name: doc.data().name,
         gender: doc.data().gender,
         species: doc.data().species,
         birthDay: new Date(doc.data().birthday.seconds * 1000 + doc.data().birthday.nanoseconds / 1e6),
-      })
+      });
     });
     return () => subscriber();
 
@@ -33,10 +34,10 @@ const ProfilePage = () => {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[componentStyle.AndroidSafeArea,styles.container]}>
       <Image style={styles.profilePicture} source={require('../../assets/images/profilepics.jpg')} />
 
-      <Text style={[header.x40, { color: neutral.s800 }]}>{pet.name}</Text>
+      <Text style={[subheader.x40, { color: neutral.s600 }]}>{pet.name}</Text>
       <View style={styles.detailsContainer}>
         {/* <Text style={[subheader.x30, { color: neutral.s800 }]}>Pet details</Text> */}
 
@@ -67,14 +68,15 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    gap: 8,
-    marginHorizontal: 16
+    gap: 12,
+    marginHorizontal: 16,
   },
 
   profilePicture: {
     width: 80,
     height: 80,
-    borderRadius: 99
+    borderRadius: 99,
+    marginTop: 16
   },
 
   detailsContainer: {

@@ -4,10 +4,12 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Button from '../../../components/basic/Button'
 import { getAuth, signOut } from 'firebase/auth'
 import { db } from '../../../services/config'
-import { danger } from '../../../assets/style/colors'
-import { body } from '../../../assets/style/typography'
+import { danger, neutral, primary } from '../../../assets/style/colors'
+import { body, subheader } from '../../../assets/style/typography'
+import LogOutIcon from '../../../assets/icons/log-out.svg';
+import SimpleHeader from '../../../components/basic/SimpleHeader'
 
-const SettingsPage = () => {
+const SettingsPage = ({navigation}:any) => {
 
   const auth = getAuth();
   const handleLogout = () => {
@@ -16,9 +18,11 @@ const SettingsPage = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <SimpleHeader onButtonPress={() => navigation.goBack()} />
       <View>
         <TouchableOpacity style={styles.dangerButton} onPress={handleLogout}>
-          <Text style={[body.x30,{color: '#FFF'}]}>Log out</Text>
+          {/* <LogOutIcon color={neutral.s600}/> */}
+          <Text style={[subheader.x30,{color: danger.s400}]}>Log out</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -32,15 +36,18 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 16,
     backgroundColor: '#F3F2F7',
+    gap: 16
   },
 
   dangerButton: {
-    backgroundColor: '#D94E4E',
+    flexDirection: 'row',
+    backgroundColor: '#FFF',
     alignItems: 'center',
-    justifyContent: 'center',
-    verticalAlign: 'middle',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 16,
     height: 44,
     borderRadius: 12,
+    gap: 8,
     minHeight: 28,
   }
 })

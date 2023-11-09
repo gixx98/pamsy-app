@@ -4,7 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import { componentStyle } from '../../assets/style/components';
 import { neutral, primary } from '../../assets/style/colors';
 import { addMonths, eachDayOfInterval, endOfDay, endOfMonth, endOfWeek, format, startOfDay, startOfMonth, startOfWeek } from 'date-fns';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../../services/config';
 import { usePetContext } from '../../context/PetContext';
 import ShortDateView from '../../components/ShortDateView';
@@ -14,6 +14,8 @@ import { Dimensions } from "react-native";
 import BackIcon from '../../assets/icons/angle-left.svg';
 import ForwardIcon from '../../assets/icons/angle-right.svg';
 import SearchIcon from '../../assets/icons/search.svg';
+import SegmentedControl from '@react-native-segmented-control/segmented-control';
+import Header from '../../components/Header';
 
 
 const width = Dimensions.get('window').width;
@@ -21,6 +23,7 @@ const width = Dimensions.get('window').width;
 
 const DiaryPage = () => {
   const [filter, setFilter] = useState('month'); // 'month', 'week', 'day'
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [events, setEvents] = useState<unknown[]>([]); // List of events from Firestore
   const [filteredEvents, setFilteredEvents] = useState<unknown[]>([]); // Events after applying filter and search
@@ -31,7 +34,7 @@ const DiaryPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(() => {
-    const subscriber = onSnapshot(collection(db, `pets/${petId}/events`), (doc) => {
+    const subscriber = onSnapshot(query(collection(db, `pets/${petId}/events`), orderBy("createdAt", 'asc')), (doc) => {
       setLoading(true);
       const eventsArray: any = [];
       doc.forEach((doc) => {
@@ -39,6 +42,8 @@ const DiaryPage = () => {
           key: doc.id,
           name: doc.data().name,
           category: doc.data().category,
+          value: doc.data().value,
+          unitOfMeasure: doc.data().unitOfMeasure,
           createdAt: new Date(doc.data().createdAt.seconds * 1000 + doc.data().createdAt.nanoseconds / 1e6),
           notes: doc.data().notes,
         });
@@ -123,26 +128,30 @@ const DiaryPage = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* <Picker
-        selectedValue={filter}
-        onValueChange={(itemValue) => setFilter(itemValue)}
-      >
-        <Picker.Item label="Month" value="month" />
-        <Picker.Item label="Week" value="week" />
-        <Picker.Item label="Day" value="day" />
-      </Picker> */}
+    <SafeAreaView style={[componentStyle.AndroidSafeArea, styles.container]}>
+
+      {/* <Header type='fromDiaryPage' /> */}
       <View style={styles.dateSelector}>
-        <TouchableOpacity onPress={handleBack}>
+        <TouchableOpacity onPress={handleBack} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
           <BackIcon color={primary.s600} />
         </TouchableOpacity>
         <Text style={[subheader.x30, { color: neutral.s600 }]}>{selectedDate.toLocaleString('en-EN', { month: 'long' })}</Text>
-        <TouchableOpacity onPress={handleForward}>
+        <TouchableOpacity onPress={handleForward} style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}>
           <ForwardIcon color={primary.s600} />
         </TouchableOpacity>
       </View>
 
-      <View style={styles.searchSection}>
+      {/* <View style={{ marginHorizontal: 16, marginVertical: 8 }}>
+        <SegmentedControl
+          values={['Month', 'Week', 'Day']}
+          selectedIndex={selectedIndex}
+          onChange={(event) => {
+            setSelectedIndex(event.nativeEvent.selectedSegmentIndex);
+          }}
+        />
+      </View> */}
+
+      {/* <View style={styles.searchSection}>
         <SearchIcon width={24} height={24} />
         <TextInput
           placeholder="Search events"
@@ -150,7 +159,7 @@ const DiaryPage = () => {
           onChangeText={(text) => setSearchTerm(text)}
           style={[styles.input]}
         />
-      </View>
+      </View> */}
 
       {loading ? <ActivityIndicator /> :
         <FlatList
@@ -164,7 +173,7 @@ const DiaryPage = () => {
               <View style={{ width: '100%', justifyContent: 'center' }}>
                 {item.events && item.events.map((event: any) => (
                   <View key={event.key} style={{ width: '100%' }} >
-                    <Event id={event.key} name={event.name} category={event.category} date={event.createdAt} notes={event.notes} type='fromDiary' />
+                    <Event id={event.key} name={event.name} category={event.category} date={event.createdAt} notes={event.notes} type='fromDiary' value={event.value} unitOfMeasure={event.unitOfMeasure} />
                   </View>
                 ))}
                 {!item.events && (
@@ -198,8 +207,11 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 40,
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
+    paddingBottom: 4,
+    borderBottomWidth: 1,
+    borderBottomColor: neutral.s100,
+    // backgroundColor: '#FFF'
   },
 
   combinedDataContainer: {

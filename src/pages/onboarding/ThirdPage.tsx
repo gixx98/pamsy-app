@@ -33,7 +33,7 @@ const ThirdPage = ({ navigation, route }: any) => {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} >
             <SafeAreaView style={styles.container}>
-                <SimpleHeader onButtonPress={handleBackPress} />
+                <SimpleHeader name='' onButtonPress={handleBackPress} />
 
                 <View style={styles.center}>
                     <Text style={[header.x50, { color: neutral.s800 }]}>What is {name}'s gender?</Text>

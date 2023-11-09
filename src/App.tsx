@@ -31,6 +31,7 @@ import FourthPage from './pages/onboarding/FourthPage';
 import FifthPage from './pages/onboarding/FifthPage';
 import SixthPage from './pages/onboarding/SixthPage';
 import VerPage from './pages/onboarding/VerPage';
+import { success } from './assets/style/colors';
 
 export type ScreenNames = ["Onboarding", "FirstStep", "SecondStep", "ThirdStep", "FourthStep", "FifthStep", "SixthStep", "VerStep", "Login", "Registration", "AuthTab", "EditEvent", "Settings", "CreateNew", "AddActivityPage", "Weight", "Observations", "VetAppointments", "AddObservation", "ObservationDetails"]
 export type RootStackParamList = Record<ScreenNames[number], undefined>;
@@ -79,11 +80,17 @@ export default function App() {
     success: (props: any) => (
       <BaseToast
         {...props}
-        style={{ borderLeftColor: 'pink' }}
-        contentContainerStyle={{ paddingHorizontal: 15 }}
+        style={{ borderRadius: 99, borderLeftWidth: 0, height: 60}}
+        contentContainerStyle={{
+          backgroundColor: success.s400,
+          borderRadius: 99,
+          paddingVertical: 12,
+          alignItems: 'center',
+        }}
         text1Style={{
-          fontSize: 15,
-          fontWeight: '400'
+          fontSize: 14,
+          color: '#FFF',
+          fontFamily: 'Inter_500Medium',
         }}
       />
     ),
@@ -135,17 +142,20 @@ export default function App() {
                   presentation: 'modal'
                 }}>
                   <Stack.Screen name='CreateNew' component={CreateNew} options={{
-                    title: 'Add activity'
+                    title: 'Select category'
                   }} />
                   <Stack.Screen name='AddObservation' component={AddObservationModal} options={{
                     title: 'New collection',
                   }} />
                 </Stack.Group>
-                <Stack.Screen name='Settings' component={SettingsPage} />
+                <Stack.Screen name='Settings' component={SettingsPage} options={{
+                  headerShown: false
+                }} />
                 <Stack.Screen name='EditEvent' component={EventDetailsPage} options={{
                   headerShown: false
                 }} />
                 <Stack.Screen name='AddActivityPage' component={AddActivityPage} options={{
+                  headerShown: false,
                   title: 'Add activity'
                 }} />
                 <Stack.Screen name='Weight' component={WeightPage} options={{
@@ -202,7 +212,7 @@ export default function App() {
               </Stack.Group>
             )}
           </Stack.Navigator>
-          <Toast />
+          <Toast config={toastConfig} />
         </PetProvider>
       </NavigationContainer>
     </GestureHandlerRootView>

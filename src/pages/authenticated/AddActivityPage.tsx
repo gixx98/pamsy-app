@@ -1,4 +1,4 @@
-import { ActivityIndicator, KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ActivityIndicator, KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Button from '../../components/basic/Button';
 import { addEventByPetId, getPetId } from '../../services/pet';
@@ -24,6 +24,7 @@ import Stethoscope from '../../assets/icons/stethoscope.svg'
 import SimpleHeader from '../../components/basic/SimpleHeader';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { usePetContext } from '../../context/PetContext';
+import { addObservation, addObservationToCollection, getAllObservation } from '../../services/observation';
 
 
 const eventCategory: any = {
@@ -43,6 +44,11 @@ const eventCategory: any = {
   'Weight': Weight
 };
 
+type Observation = {
+  id: string;
+  title: string;
+};
+
 const AddActivityPage = ({ route, navigation }: any) => {
 
   const { category } = route.params;
@@ -56,7 +62,11 @@ const AddActivityPage = ({ route, navigation }: any) => {
   const [notes, setNotes] = useState('');
   const { petId } = usePetContext();
   const [loading, setLoading] = useState(false);
+  const [observationsLoading, setObservationsLoading] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const [observations, setObservations] = useState<Observation[]>([]);
+  const [selectedObservation, setSelectedObservation] = useState<Observation | null>(null);
 
 
   const handleClick = async () => {
@@ -69,18 +79,33 @@ const AddActivityPage = ({ route, navigation }: any) => {
       value: numValue,
       unitOfMeasure: unitOfMeasure,
       dateOfEvent: date
-    }
-    addEventByPetId(petId, eventData).then(() => {
-      navigation.goBack()
-      Toast.show({
-        type: 'success',
-        text1: 'Event was added successfully! ✅',
-        position: 'top',
-        topOffset: 60
-      });
-      setLoading(false);
+    };
+    if (category == 'Observation' && selectedObservation) {
+      addObservationToCollection(petId, selectedObservation.id, notes).then(() => {
+        navigation.goBack()
+        Toast.show({
+          type: 'success',
+          text1: 'Observation was added successfully! ✅',
+          position: 'top',
+          topOffset: 60
+        });
+        setLoading(false);
 
-    });
+      });
+    } else {
+      addEventByPetId(petId, eventData).then(() => {
+        navigation.goBack()
+        Toast.show({
+          type: 'success',
+          text1: 'Event was added successfully! ✅',
+          position: 'top',
+          topOffset: 60
+        });
+        setLoading(false);
+
+      });
+    }
+
   }
 
   useEffect((): any => {
@@ -89,9 +114,27 @@ const AddActivityPage = ({ route, navigation }: any) => {
     }
   }, [])
 
+  useEffect((): any => {
+    const fetchData = async () => {
+      setObservationsLoading(true);
+      const observationsData = await getAllObservation(petId);
+      setObservations(observationsData);
+      if (observationsData.length > 0) {
+        setSelectedObservation(observationsData[0]);
+      }
+      setObservationsLoading(false);
+    };
+
+    fetchData();
+  }, [])
+
   // const isButtonDisabled = !name;
   const catLowerCase = category.toLowerCase();
   const buttonTitle = `Add ${catLowerCase}`
+
+  const handleObservationSelection = (observation: any) => {
+    setSelectedObservation(observation);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -106,28 +149,73 @@ const AddActivityPage = ({ route, navigation }: any) => {
             <View>
               <Text style={[body.x10, { color: neutral.s400 }]}>New event</Text>
               <Text style={[subheader.x40, { color: neutral.s600 }]}>{category}</Text>
-
-
             </View>
           </View>
 
+
+          {category === 'Observation' ?
+            <View>
+              <Text style={[subheader.x10, { color: neutral.s800 }]}>Select collection</Text>
+              <View style={styles.observationsContainer}>
+                {observations.map((observation: any) => (
+                  <TouchableOpacity
+                    key={observation.id}
+                    style={[
+                      styles.observationOption,
+                      selectedObservation === observation && styles.selectedOption,
+                    ]}
+                    onPress={() => handleObservationSelection(observation)}
+                  >
+                    <Text style={[body.x10, { color: neutral.s500 }, selectedObservation === observation && { color: neutral.s100 }]}>{observation.title}</Text>
+                  </TouchableOpacity>
+
+                ))}
+              </View>
+            </View> : <></>}
+
+          {/* VACCINATION IS THE SELECTED */}
+          {category === 'Vaccination' ?
+            <><View style={styles.inputSection}>
+              <Text style={[subheader.x10, { color: neutral.s800 }]}>Vaccination type</Text>
+              <TextInput
+                placeholder='Enter vaccination type'
+                value={name}
+                style={componentStyle.textInput}
+                onChangeText={setName} />
+            </View>
+
+            </> :
+            <>
+            </>
+          }
+
           {/* VET APPOINTMENT IS THE SELECTED */}
           {category === 'Vet appointment' ?
-            <View style={{ justifyContent: 'flex-start' }}>
-              <Text style={[subheader.x20, { color: neutral.s600, alignSelf: 'flex-start' }]}>Date and time</Text>
-              <DateTimePicker
-                minimumDate={new Date()}
-                maximumDate={new Date(2030, 1, 1)}
-                value={date}
-                mode='datetime'
-                style={{ alignSelf: 'flex-start' }}
-                onChange={(event, selectedDate) => {
-                  if (selectedDate) {
-                    setDate(selectedDate); // Update the date state with the selected date
-                  }
-                }}
-              />
-            </View>
+            <>
+              <View style={styles.inputSection}>
+                <Text style={[subheader.x10, { color: neutral.s800 }]}>Reason of appointment</Text>
+                <TextInput
+                  placeholder='Enter appointment reason'
+                  value={name}
+                  style={componentStyle.textInput}
+                  onChangeText={setName} />
+              </View>
+              <View style={{ justifyContent: 'flex-start' }}>
+                <Text style={[subheader.x20, { color: neutral.s600, alignSelf: 'flex-start' }]}>Date and time</Text>
+                <DateTimePicker
+                  minimumDate={new Date()}
+                  maximumDate={new Date(2030, 1, 1)}
+                  value={date}
+                  mode='datetime'
+                  style={{ alignSelf: 'flex-start' }}
+                  onChange={(event, selectedDate) => {
+                    if (selectedDate) {
+                      setDate(selectedDate); // Update the date state with the selected date
+                    }
+                  }}
+                />
+              </View>
+            </>
             : <></>}
 
           {/* MEDICATION IS THE SELECTED */}
@@ -194,14 +282,6 @@ const AddActivityPage = ({ route, navigation }: any) => {
             <></>
           }
 
-          {/* <View style={styles.inputSection}>
-            <Text style={[subheader.x10, { color: neutral.s800 }]}>Name</Text>
-            <TextInput
-              placeholder='Enter a name'
-              value={name}
-              style={componentStyle.textInput}
-              onChangeText={setName} />
-          </View> */}
 
           {category === 'Weight' ?
             <View style={styles.inputSection}>
@@ -230,6 +310,7 @@ const AddActivityPage = ({ route, navigation }: any) => {
         </View>
         <Button onPress={handleClick} title={buttonTitle} />
         <LoadingModal modalVisible={loading} task='Adding event...' />
+        <LoadingModal modalVisible={observationsLoading} task='Loading event...' />
       </KeyboardAvoidingView>
     </SafeAreaView>
   )
@@ -253,5 +334,24 @@ const styles = StyleSheet.create({
 
   inputSection: {
     gap: 4,
-  }
+  },
+
+  observationsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8
+  },
+
+  observationOption: {
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    backgroundColor: '#fff',
+    borderRadius: 99,
+    marginVertical: 4,
+    alignItems: 'center'
+  },
+  selectedOption: {
+    backgroundColor: primary.s600,
+    color: '#fff'
+  },
 })

@@ -32,10 +32,20 @@ import FifthPage from './pages/onboarding/FifthPage';
 import SixthPage from './pages/onboarding/SixthPage';
 import VerPage from './pages/onboarding/VerPage';
 import { success } from './assets/style/colors';
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
 
 export type ScreenNames = ["Onboarding", "FirstStep", "SecondStep", "ThirdStep", "FourthStep", "FifthStep", "SixthStep", "VerStep", "Login", "Registration", "AuthTab", "EditEvent", "Settings", "CreateNew", "AddActivityPage", "Weight", "Observations", "VetAppointments", "AddObservation", "ObservationDetails"]
 export type RootStackParamList = Record<ScreenNames[number], undefined>;
 export type StackNavigation = NavigationProp<RootStackParamList>;
+
+// Notifications.setNotificationHandler({
+//   handleNotification: async () => ({
+//     shouldShowAlert: true,
+//     shouldPlaySound: false,
+//     shouldSetBadge: false,
+//   }),
+// });
 
 
 export default function App() {

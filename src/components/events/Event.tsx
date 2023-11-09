@@ -75,7 +75,9 @@ const Event = ({
 			category: category,
 			notes: notes,
 			date: formattedDate,
-			icon: SelectedCategory
+			icon: SelectedCategory,
+			value: value,
+			unitOfMeasure: unitOfMeasure
 		})
 	}
 
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 16,
 		paddingVertical: 12,
 		alignItems: 'center',
-		marginBottom: 8,
+		marginBottom: 4,
 		justifyContent: 'space-between',
 
 	},

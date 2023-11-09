@@ -4,6 +4,7 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
   query,
   setDoc,
@@ -35,3 +36,29 @@ export const editObservation = async (
     completed: !completed,
   });
 };
+
+export const getAllObservation = async (petId: string | null) => {
+  const q = collection(db, `pets/${petId}/observations`);
+  const querySnapshot = await getDocs(q);
+  const observations:any[] = [];
+
+  querySnapshot.forEach((doc) => {
+    const observationData = doc.data();
+    observations.push({
+      id: doc.id,
+      title: observationData.title, // Replace with the actual field name from your observation data
+    });
+  });
+
+  return observations;
+};
+
+export const addObservationToCollection = async (petId: string | null, observationId: string, notes: any) => {
+  const user: any = auth.currentUser;
+
+  if (user) {
+    await addDoc(collection(db, `pets/${petId}/observations/${observationId}/records`), {
+      notes: notes,
+    });
+  }
+}

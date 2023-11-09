@@ -54,7 +54,7 @@ export default HealthPage
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: '#F3F2F7',
+		backgroundColor: primary.backgroundColor,
 		height: '100%'
 	},
 

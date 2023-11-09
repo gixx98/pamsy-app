@@ -8,11 +8,9 @@ import { auth, db } from '../../../services/config';
 import { getPetId } from '../../../services/pet';
 import Event from '../../../components/events/Event';
 import { body, header, subheader } from '../../../assets/style/typography';
-import { neutral } from '../../../assets/style/colors';
+import { neutral, primary } from '../../../assets/style/colors';
 import Reminders from '../../../components/Reminders';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import BoneBreakIcon from '../../../assets/icons/bone-break.svg';
-import EmptyEventsIcon from '../../../assets/icons/empty-events.svg'
 import Button from '../../../components/basic/Button';
 import { usePetContext } from '../../../context/PetContext';
 import { endOfDay, startOfDay } from 'date-fns';
@@ -154,7 +152,7 @@ const HomePage = ({ navigation, route }: any) => {
                 <Event id={item.key} name={item.name} category={item.category} notes={item.notes} date={item.date} value={item.value} unitOfMeasure={item.unitOfMeasure} />
               </View>
             )}
-            style={{height: '100%'}}
+            style={{ height: '100%' }}
             keyExtractor={(item: any) => item.key}
           />}
 
@@ -167,7 +165,7 @@ export default HomePage
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F3F2F7',
+    backgroundColor: primary.backgroundColor,
     paddingHorizontal: 16,
     height: '100%'
   },

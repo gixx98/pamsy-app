@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { usePetContext } from '../../../context/PetContext';
 import { DocumentData, collection, getDocs, onSnapshot, orderBy, query, where } from 'firebase/firestore';
@@ -101,7 +101,7 @@ const WeightPage = ({ route, navigation }: any) => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.chartContainer}>
         <LineChart
           data={data}
@@ -124,7 +124,7 @@ const WeightPage = ({ route, navigation }: any) => {
       }
       <Button title='Add weight' onPress={handleClick} />
 
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -132,13 +132,15 @@ export default WeightPage
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: '#F3F2F7',
     paddingTop: 8,
-    paddingHorizontal: 16,
+    marginHorizontal: 16,
     gap: 8
   },
   chartContainer: {
     borderRadius: 12,
+    marginTop: 16,
     alignItems: 'center',
     overflow: 'hidden'
   }

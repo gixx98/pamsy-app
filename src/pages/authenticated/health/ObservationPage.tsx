@@ -70,8 +70,8 @@ export default function ObservationPage({ route, navigation }: any) {
                       <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
                         <TouchableOpacity style={styles.observationContainer} onPress={() => handleClick(item.key, item.title, item.completed, item.createdAt.toLocaleDateString())}>
                           <View>
-                            <Text style={[body.x20, { color: neutral.s800 }]}>{item.title}</Text>
                             <Text style={[body.x10, { color: neutral.s400 }]}>{item.createdAt.toLocaleDateString()}</Text>
+                            <Text style={[body.x20, { color: neutral.s800 }]}>{item.title}</Text>
 
                           </View>
                           <Text style={[subheader.x20, { color: primary.s600 }]}>Open</Text>

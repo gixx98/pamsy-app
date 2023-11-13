@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     borderRadius: 16,
     elevation: 3,
-    marginTop: 12,
     backgroundColor: color.primary.s600,
   },
   disabledButton: {

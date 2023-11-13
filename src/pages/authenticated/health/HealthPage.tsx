@@ -9,8 +9,16 @@ import { body, subheader } from '../../../assets/style/typography'
 import { usePetContext } from '../../../context/PetContext'
 import { collection, onSnapshot, query, where } from 'firebase/firestore'
 import { db } from '../../../services/config'
+import Animated, { withSpring } from 'react-native-reanimated'
+import { useSharedValue } from 'react-native-reanimated';
+import Button from '../../../components/basic/Button'
+
 
 const HealthPage = ({ navigation, params }: any) => {
+	const width = useSharedValue(100);
+	const handlePress = () => {
+		width.value = withSpring(width.value + 50);
+	};
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -46,6 +54,17 @@ const HealthPage = ({ navigation, params }: any) => {
 					</View>
 				</TouchableOpacity>
 			</View>
+
+			{/* 
+			Animation tried out
+			<Animated.View
+				style={{
+					width,
+					height: 32,
+					backgroundColor: 'violet',
+				}}
+			/>
+			<Button onPress={handlePress} title="Click me" /> */}
 		</SafeAreaView>
 	)
 }

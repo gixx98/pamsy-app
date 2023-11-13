@@ -53,12 +53,20 @@ export const getAllObservation = async (petId: string | null) => {
   return observations;
 };
 
-export const addObservationToCollection = async (petId: string | null, observationId: string, notes: any) => {
+interface Observation {
+  createdAt: Date,
+  createdBy: string | undefined,
+  notes: string
+}
+
+export const addObservationToCollection = async (petId: string | null, observationId: string, observation: Observation) => {
   const user: any = auth.currentUser;
 
   if (user) {
     await addDoc(collection(db, `pets/${petId}/observations/${observationId}/records`), {
-      notes: notes,
+      createdAt: observation.createdAt,
+      createdBy: observation.createdBy,
+      notes: observation.notes,
     });
   }
 }

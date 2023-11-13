@@ -64,6 +64,7 @@ const Event = ({
 
 	const navigation: any = useNavigation();
 	const formattedEventDate = format(date, 'kk:mm');
+	
 	const eventDate = date;
 	let options: any = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 	const formattedDate = eventDate.toLocaleDateString('en-US', options);
@@ -75,7 +76,6 @@ const Event = ({
 			category: category,
 			notes: notes,
 			date: formattedDate,
-			icon: SelectedCategory,
 			value: value,
 			unitOfMeasure: unitOfMeasure
 		})
@@ -111,6 +111,7 @@ const Event = ({
 					<Text style={[body.x10, { color: neutral.s800 }]}>{formattedEventDate}</Text>
 				}
 			</View>
+			
 		</TouchableOpacity>
 	)
 }

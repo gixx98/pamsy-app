@@ -25,6 +25,7 @@ import SimpleHeader from '../../components/basic/SimpleHeader';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { usePetContext } from '../../context/PetContext';
 import { addObservation, addObservationToCollection, getAllObservation } from '../../services/observation';
+import { auth } from '../../services/config';
 
 
 const eventCategory: any = {
@@ -81,7 +82,13 @@ const AddActivityPage = ({ route, navigation }: any) => {
       dateOfEvent: date
     };
     if (category == 'Observation' && selectedObservation) {
-      addObservationToCollection(petId, selectedObservation.id, notes).then(() => {
+      const observation = {
+        createdAt: new Date(),
+        createdBy: auth.currentUser?.uid,
+        notes: notes
+      }
+      addObservationToCollection(petId, selectedObservation.id, observation).then(() => {
+        setLoading(false);
         navigation.goBack()
         Toast.show({
           type: 'success',
@@ -89,7 +96,6 @@ const AddActivityPage = ({ route, navigation }: any) => {
           position: 'top',
           topOffset: 60
         });
-        setLoading(false);
 
       });
     } else {
@@ -233,7 +239,6 @@ const AddActivityPage = ({ route, navigation }: any) => {
                 <Text style={[subheader.x10, { color: neutral.s800 }]}>Dosage</Text>
                 <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'center', alignItems: 'center' }}>
                   <TextInput
-                    autoFocus={true}
                     placeholder='Enter dosage'
                     value={value}
                     style={[componentStyle.textInput, { flex: 1.5 }]}
@@ -262,7 +267,6 @@ const AddActivityPage = ({ route, navigation }: any) => {
               <Text style={[subheader.x10, { color: neutral.s800 }]}>Duration</Text>
               <View style={{ flexDirection: 'row', gap: 8, justifyContent: 'center', alignItems: 'center' }}>
                 <TextInput
-                  autoFocus={true}
                   placeholder='Enter duration'
                   value={value}
                   style={[componentStyle.textInput, { flex: 1.5 }]}

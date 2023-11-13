@@ -1,5 +1,5 @@
 import { Platform, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { body, subheader } from '../assets/style/typography';
 import { componentStyle } from '../assets/style/components';
 import { neutral, primary } from '../assets/style/colors';
@@ -10,6 +10,7 @@ import InfoIcon from '../assets/icons/info.svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { addObservation } from '../services/observation';
 import { usePetContext } from '../context/PetContext';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 
 const AddObservationModal = ({ navigation, route }: any) => {
@@ -62,7 +63,7 @@ const AddObservationModal = ({ navigation, route }: any) => {
       <Button title="Create collection" onPress={handleNewClick} disabled={!title}></Button>
       <View style={[{ flexDirection: 'row', gap: 8, width: '100%', alignItems: 'center' }]}>
         <InfoIcon color={neutral.s500} width={24} height={24} />
-        <Text style={[body.x10, { color: neutral.s500, flexShrink: 1 }]}>After you created this collection of observations, you can add your observations to it whenever they occur.</Text>
+        <Text style={[body.x10, { color: neutral.s500, flexShrink: 1 }]}>After you created this collection, you can add your observations to it whenever they occur.</Text>
       </View>
     </View>
   )

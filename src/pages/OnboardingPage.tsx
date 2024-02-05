@@ -38,7 +38,7 @@ export default OnboardingPage
 const styles = StyleSheet.create({
     container: {
         gap: 4,
-        backgroundColor: '#F3F2F7',
+        backgroundColor: '#FAFAFA',
         height: '100%',
         justifyContent: 'space-between'
     },
@@ -51,11 +51,14 @@ const styles = StyleSheet.create({
     },
 
     secondaryButton: {
-        borderColor: primary.s600,
+        borderColor: "#CDC3F7",
+        borderWidth: 1,
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
         height: 44,
-        borderRadius: 18
+        borderRadius: 99,
+        marginTop: 4,
+        backgroundColor: "#FFF"
     }
 })

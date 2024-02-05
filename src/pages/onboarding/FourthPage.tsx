@@ -40,6 +40,7 @@ const FourthPage = ({ navigation, route }: any) => {
                             minimumDate={new Date(2000, 0, 1)}
                             maximumDate={new Date()}
                             value={date}
+                            display='spinner'
                             mode='date'
                             onChange={(event, selectedDate) => {
                                 if (selectedDate) {

@@ -34,18 +34,21 @@ import VerPage from './pages/onboarding/VerPage';
 import { success } from './assets/style/colors';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
+import AddMedicationPage from './pages/authenticated/AddMedicationPage';
+import MedicationPage from './pages/authenticated/health/MedicationPage';
 
-export type ScreenNames = ["Onboarding", "FirstStep", "SecondStep", "ThirdStep", "FourthStep", "FifthStep", "SixthStep", "VerStep", "Login", "Registration", "AuthTab", "EditEvent", "Settings", "CreateNew", "AddActivityPage", "Weight", "Observations", "VetAppointments", "AddObservation", "ObservationDetails"]
+export type ScreenNames = ["Onboarding", "FirstStep", "SecondStep", "ThirdStep", "FourthStep", "FifthStep", "SixthStep", "VerStep", "Login", "Registration", "AuthTab", "EditEvent", "Settings", "CreateNew", "AddActivityPage", "Weight", "Observations", "VetAppointments", "AddObservation", "ObservationDetails", "AddMedicationPage", "MedicationPage"]
 export type RootStackParamList = Record<ScreenNames[number], undefined>;
 export type StackNavigation = NavigationProp<RootStackParamList>;
 
-// Notifications.setNotificationHandler({
-//   handleNotification: async () => ({
-//     shouldShowAlert: true,
-//     shouldPlaySound: false,
-//     shouldSetBadge: false,
-//   }),
-// });
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 
 
 export default function App() {
@@ -90,7 +93,7 @@ export default function App() {
     success: (props: any) => (
       <BaseToast
         {...props}
-        style={{ borderRadius: 99, borderLeftWidth: 0, height: 60}}
+        style={{ borderRadius: 99, borderLeftWidth: 0, height: 60 }}
         contentContainerStyle={{
           backgroundColor: success.s400,
           borderRadius: 99,
@@ -182,6 +185,15 @@ export default function App() {
                 }} />
                 <Stack.Screen name='VetAppointments' component={VetAppointmentPage} options={{
                   title: 'Weight',
+                  headerBackTitleVisible: false
+                }} />
+                <Stack.Screen name='AddMedicationPage' component={AddMedicationPage} options={{
+                  title: 'Add medication',
+                  headerBackTitleVisible: false
+                }} />
+
+                <Stack.Screen name='MedicationPage' component={MedicationPage} options={{
+                  title: 'Medication',
                   headerBackTitleVisible: false
                 }} />
               </Stack.Group>

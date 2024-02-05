@@ -53,6 +53,16 @@ const HealthPage = ({ navigation, params }: any) => {
 						<RightArrowIcon color={primary.s600} />
 					</View>
 				</TouchableOpacity>
+
+				<TouchableOpacity onPress={() => navigation.navigate("MedicationPage")}>
+					<View style={[styles.entryContainer]}>
+						<View style={styles.entryLeftContainer}>
+							<Text>💊</Text>
+							<Text style={[body.x20, { color: neutral.s800 }]}>Medication</Text>
+						</View>
+						<RightArrowIcon color={primary.s600} />
+					</View>
+				</TouchableOpacity>
 			</View>
 
 			{/* 
@@ -87,7 +97,9 @@ const styles = StyleSheet.create({
 
 	entryContainer: {
 		backgroundColor: '#FFF',
-		borderRadius: 12,
+		borderRadius: 18,
+		borderWidth: 1,
+		borderColor: neutral.s100,
 		flexDirection: 'row',
 		alignItems: 'center',
 		alignContent: 'center',

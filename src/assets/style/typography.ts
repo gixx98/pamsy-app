@@ -60,7 +60,7 @@ export const fontWeight: Record<FontWeight, TextStyle> = {
     fontFamily: "Inter_500Medium",
   },
   semibold: {
-    fontFamily: "Inter_600SemiBold",
+    fontFamily: "Inter_600SemiBold"
   },
 };
 

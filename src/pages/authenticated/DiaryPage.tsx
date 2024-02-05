@@ -1,9 +1,9 @@
 import { ActivityIndicator, Alert, FlatList, Modal, Pressable, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Picker } from '@react-native-picker/picker';
 import { componentStyle } from '../../assets/style/components';
 import { neutral, primary } from '../../assets/style/colors';
-import { addMonths, eachDayOfInterval, endOfDay, endOfMonth, endOfWeek, format, startOfDay, startOfMonth, startOfWeek } from 'date-fns';
+import { addMonths, eachDayOfInterval, endOfDay, endOfMonth, endOfWeek, endOfYear, format, isWithinInterval, startOfDay, startOfMonth, startOfWeek, startOfYear } from 'date-fns';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '../../services/config';
 import { usePetContext } from '../../context/PetContext';
@@ -16,6 +16,7 @@ import ForwardIcon from '../../assets/icons/angle-right.svg';
 import SearchIcon from '../../assets/icons/search.svg';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import Header from '../../components/Header';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 const width = Dimensions.get('window').width;
@@ -23,8 +24,8 @@ const width = Dimensions.get('window').width;
 
 const DiaryPage = () => {
   const [filter, setFilter] = useState('month'); // 'month', 'week', 'day'
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All')
   const [events, setEvents] = useState<unknown[]>([]); // List of events from Firestore
   const [filteredEvents, setFilteredEvents] = useState<unknown[]>([]); // Events after applying filter and search
   const { petId } = usePetContext();
@@ -32,6 +33,9 @@ const DiaryPage = () => {
   const [dates, setDates] = useState<Date[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const categoryOptions = ['All', 'Food', 'Weight', 'Walk', 'Training'];
+
 
   useEffect(() => {
     const subscriber = onSnapshot(query(collection(db, `pets/${petId}/events`), orderBy("createdAt", 'asc')), (doc) => {
@@ -63,10 +67,13 @@ const DiaryPage = () => {
     filterEvents();
     setDates(generateDates());
 
-  }, [filter, searchTerm, selectedDate, events]);
+  }, [events, searchTerm, selectedDate]);
 
+  useEffect(() => {
+    console.log("Diary was rendered + " + new Date().toTimeString())
+  })
 
-  const filterEvents = () => {
+  const filterEvents = useCallback(() => {
     let filtered: any[] = [...events];
 
     if (filter === 'month') {
@@ -79,10 +86,10 @@ const DiaryPage = () => {
 
     if (searchTerm) {
       filtered = filtered.filter(event => event.name.toLowerCase().includes(searchTerm.toLowerCase()));
-    }
+    };
 
     setFilteredEvents(filtered);
-  };
+  }, [events, filter, selectedDate, searchTerm]);
 
   const handleBack = () => {
     setSelectedDate(prevDate => addMonths(prevDate, -1));
@@ -92,11 +99,23 @@ const DiaryPage = () => {
     setSelectedDate(prevDate => addMonths(prevDate, 1));
   };
 
-  const generateDates = () => {
+  const generateDatesForYear = (year: number) => {
+    const startDate = startOfYear(new Date(year, 0, 1));
+    const endDate = endOfYear(new Date(year, 11, 31));
+    return eachDayOfInterval({ start: startDate, end: endDate });
+  };
+
+  // Pre-generate dates for the current year
+  const yearDates = generateDatesForYear(new Date().getFullYear());
+
+  const generateDates = useCallback(() => {
     if (filter === 'month') {
+      // const startDate = startOfMonth(selectedDate);
+      // const endDate = endOfMonth(selectedDate);
+      // return eachDayOfInterval({ start: startDate, end: endDate });
       const startDate = startOfMonth(selectedDate);
       const endDate = endOfMonth(selectedDate);
-      return eachDayOfInterval({ start: startDate, end: endDate });
+      return yearDates.filter(date => isWithinInterval(date, { start: startDate, end: endDate }));
     } else if (filter === 'week') {
       // Generate dates for the current week
     } else if (filter === 'day') {
@@ -104,9 +123,9 @@ const DiaryPage = () => {
     }
 
     return [];
-  };
+  }, [filter, selectedDate]);
 
-  // const dates = generateDates();
+
 
   const combinedData = dates.map(date => {
     const eventsForDate = filteredEvents.filter((event: any) => format(event.createdAt, 'dd/MM/yyyy') === format(date, 'dd/MM/yyyy'));
@@ -127,6 +146,10 @@ const DiaryPage = () => {
     setDates(generateDates());
   }
 
+  const handleCategorySelector = (category: string) => {
+    setSelectedCategory(category);
+  };
+
   return (
     <SafeAreaView style={[componentStyle.AndroidSafeArea, styles.container]}>
 
@@ -140,6 +163,23 @@ const DiaryPage = () => {
           <ForwardIcon color={primary.s600} />
         </TouchableOpacity>
       </View>
+      <ScrollView horizontal={true} style={{marginHorizontal: 16, marginVertical: 8}}>
+        <View style={{flexDirection: 'row', gap: 8, height: 44}}>
+          {categoryOptions.map((options) => (
+            <TouchableOpacity
+              key={options}
+              style={[
+                styles.categoryOptions,
+                selectedCategory === options && styles.selectedOption,
+              ]}
+              onPress={() => handleCategorySelector(options)}
+            >
+              <Text style={[body.x10, styles.categoryText, selectedCategory === options && styles.selectedText]}>{options}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+      </ScrollView>
 
       {/* <View style={{ marginHorizontal: 16, marginVertical: 8 }}>
         <SegmentedControl
@@ -242,6 +282,28 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     backgroundColor: '#fff',
     color: '#424242',
+  },
+
+
+  categoryOptions: {
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    backgroundColor: '#fff',
+    borderRadius: 99,
+    marginVertical: 4,
+    alignItems: 'center'
+  },
+  selectedOption: {
+    backgroundColor: primary.s600,
+    color: '#fff'
+  },
+  categoryText: {
+    color: neutral.s800,
+    fontSize: 14
+  },
+  selectedText: {
+    color: 'white',
+    fontSize: 14
   },
 
 })

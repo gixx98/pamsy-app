@@ -107,7 +107,7 @@ export default function ObservationPage({ route, navigation }: any) {
           />
         </>}
       </View>
-      <View>
+      <View style={{gap: 8}}>
         <Text style={[body.x10, { color: neutral.s400, textAlign: 'center' }]}>You can collect more than one observation in a collection so it will be easier for you to overview.</Text>
         <Button title='New collection' onPress={() => { navigation.navigate("AddObservation") }} />
       </View>

@@ -15,16 +15,23 @@ const CategorySelector: React.FC<CategorySelectorProps> = (props) => {
     // const { navigate } = useNavigation<StackNavigation>();
     const navigation: any = useNavigation();
 
+
+
     const handleClick = () => {
-        navigation.goBack();
-        navigation.navigate("AddActivityPage", {
-            category: props.text
-        });
+        if (props.text == 'Medication') {
+            navigation.goBack();
+            navigation.navigate("AddMedicationPage");
+        } else {
+            navigation.goBack();
+            navigation.navigate("AddActivityPage", {
+                category: props.text
+            });
+        }
     }
 
     return (
         <TouchableOpacity style={styles.container} onPress={handleClick}>
-            <View style={[{flexDirection: 'row', alignItems: 'center', gap: 8}]}>
+            <View style={[{ flexDirection: 'row', alignItems: 'center', gap: 8 }]}>
                 {props.icon}
                 <Text style={body.x20}>{props.text}</Text>
             </View>

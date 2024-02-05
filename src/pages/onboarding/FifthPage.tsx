@@ -35,6 +35,7 @@ const FifthPage = ({ navigation, route }: any) => {
                         placeholder='Enter your email'
                         value={email}
                         autoFocus
+                        keyboardType='email-address'
                         autoCapitalize='none'
                         style={componentStyle.textInput}
                         onChangeText={setEmail} />

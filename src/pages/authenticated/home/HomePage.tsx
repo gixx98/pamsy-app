@@ -128,7 +128,7 @@ const HomePage = ({ navigation, route }: any) => {
         </View>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-          <Text style={[subheader.x30, { color: neutral.s600 }]}>Today</Text>
+          <Text style={[subheader.x30, { color: neutral.s600 }]}>Recet health activity</Text>
           <Text style={[body.x20, { color: neutral.s400 }]}>{formattedDate}</Text>
         </View>
 
@@ -136,7 +136,7 @@ const HomePage = ({ navigation, route }: any) => {
         {/* if the events array equals 0 (there is no event) show a different view */}
         {loading && <ActivityIndicator size={"small"} color={'#0000ff'} />}
         {loading == false && events.length === 0 ?
-          <View style={styles.emptyEventContainer}>
+          <View style={[styles.emptyEventContainer, styles.shadowProp]}>
             <Image source={require('../../../assets/images/empty-events.png')} style={{ width: 102, height: 60 }} />
             <View style={[styles.emptyEventContainer, { borderWidth: 0, gap: 0, padding: 0 }]}>
               <Text style={[subheader.x40, { color: neutral.s600 }]}>Let's Get Started</Text>
@@ -181,11 +181,11 @@ const styles = StyleSheet.create({
 
   reminderContainer: {
     width: '100%',
-    borderRadius: 12,
+    borderRadius: 18,
     padding: 4,
     backgroundColor: '#FFF',
     marginBottom: 16,
-    borderWidth: 1.5,
+    borderWidth: 1,
     borderColor: neutral.s100
   },
 
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
 
   shadowProp: {
     shadowColor: '#21521',
-    shadowOffset: { width: -2, height: 4 },
+    shadowOffset: { width: -2, height: 0 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
   },
@@ -206,9 +206,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     borderWidth: 1,
     borderColor: neutral.s100,
-    borderRadius: 12,
+    borderRadius: 18,
     gap: 8,
     padding: 16,
-    alignItems: 'center'
+    alignItems: 'center',
+    shadowColor: '#'
   }
 })

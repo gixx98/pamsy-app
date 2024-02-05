@@ -55,7 +55,7 @@ interface Event {
   createdAt?: Date;
   notes: string;
   value?: number;
-  unitOfMeasure?: string,
+  unitOfMeasure?: string;
   dosage?: number;
   dateOfEvent?: Date;
 }
@@ -66,24 +66,29 @@ export const addEventByPetId = async (petId: string, event: Event) => {
     name: event.name,
     notes: event.notes,
     createdAt: new Date(),
-  }
+  };
 
-  if(event.category == 'Medication'){
+  if (event.category == "Medication") {
     eventData.dosage = event.dosage;
-  }else if(event.category == 'Vaccination'){
-
-  }else if(event.category == 'Vet appointment'){
-    
-  }else if(event.category == 'Observation'){
-    
-  }else if(event.category == 'Weight'){
+    eventData.unitOfMeasure = ""
+  } else if (event.category == "Vaccination") {
+    eventData.unitOfMeasure = "";
+  } else if (event.category == "Vet appointment") {
+    eventData.unitOfMeasure = "";
+  } else if (event.category == "Observation") {
+    eventData.unitOfMeasure = "";
+  } else if (event.category == "Weight") {
     eventData.value = event.value;
     eventData.unitOfMeasure = event.unitOfMeasure;
-  }else if(event.category == 'Walk' || event.category == 'Training' || event.category == 'Playtime'){
+  } else if (
+    event.category == "Walk" ||
+    event.category == "Training" ||
+    event.category == "Playtime"
+  ) {
     eventData.value = event.value;
     eventData.unitOfMeasure = event.unitOfMeasure;
   }
-  
+
   await addDoc(collection(db, `pets/${petId}/events`), {
     category: event.category,
     name: event.name,

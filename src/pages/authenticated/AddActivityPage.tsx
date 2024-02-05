@@ -50,6 +50,16 @@ type Observation = {
   title: string;
 };
 
+type Event = {
+  name: string,
+  category: string,
+  createdAt: Date,
+  notes: string
+  value?: number,
+  unitOfMeasure?: string,
+  dateOfEvent?: Date
+}
+
 const AddActivityPage = ({ route, navigation }: any) => {
 
   const { category } = route.params;
@@ -73,20 +83,46 @@ const AddActivityPage = ({ route, navigation }: any) => {
   const handleClick = async () => {
     setLoading(true);
     const numValue: number = +value;
-    const eventData = {
+    let eventData: Event = {
       category: category,
       name: name,
       notes: notes,
-      value: numValue,
-      unitOfMeasure: unitOfMeasure,
-      dateOfEvent: date
+      createdAt: new Date(),
+      // value: numValue,
+      // unitOfMeasure: unitOfMeasure,
+      // dateOfEvent: date
     };
+
+    if (category == 'Weight') {
+      eventData = {
+        ...eventData,
+        unitOfMeasure: unitOfMeasure,
+        value: numValue
+      }
+    }
+
+    if (category == 'Vaccination') {
+      eventData = {
+        ...eventData,
+        dateOfEvent: date
+      }
+    }
+
+    if (category == 'Walk' || category == 'Training' || category == 'Playtime') {
+      eventData = {
+        ...eventData,
+        unitOfMeasure: unitOfMeasure,
+        value: numValue
+      }
+    }
+
     if (category == 'Observation' && selectedObservation) {
       const observation = {
         createdAt: new Date(),
         createdBy: auth.currentUser?.uid,
         notes: notes
       }
+
       addObservationToCollection(petId, selectedObservation.id, observation).then(() => {
         setLoading(false);
         navigation.goBack()
@@ -96,7 +132,6 @@ const AddActivityPage = ({ route, navigation }: any) => {
           position: 'top',
           topOffset: 60
         });
-
       });
     } else {
       addEventByPetId(petId, eventData).then(() => {
@@ -181,14 +216,30 @@ const AddActivityPage = ({ route, navigation }: any) => {
 
           {/* VACCINATION IS THE SELECTED */}
           {category === 'Vaccination' ?
-            <><View style={styles.inputSection}>
-              <Text style={[subheader.x10, { color: neutral.s800 }]}>Vaccination type</Text>
-              <TextInput
-                placeholder='Enter vaccination type'
-                value={name}
-                style={componentStyle.textInput}
-                onChangeText={setName} />
-            </View>
+            <>
+              <View style={styles.inputSection}>
+                <Text style={[subheader.x10, { color: neutral.s800 }]}>Vaccination type</Text>
+                <TextInput
+                  placeholder='Enter vaccination type'
+                  value={name}
+                  style={componentStyle.textInput}
+                  onChangeText={setName} />
+              </View>
+              <View style={{ justifyContent: 'flex-start' }}>
+                <Text style={[subheader.x20, { color: neutral.s600, alignSelf: 'flex-start' }]}>Date and time</Text>
+                <DateTimePicker
+                  minimumDate={new Date(2000, 1, 1)}
+                  maximumDate={new Date(2030, 1, 1)}
+                  value={date}
+                  mode='date'
+                  style={{ alignSelf: 'flex-start' }}
+                  onChange={(event, selectedDate) => {
+                    if (selectedDate) {
+                      setDate(selectedDate); // Update the date state with the selected date
+                    }
+                  }}
+                />
+              </View>
 
             </> :
             <>

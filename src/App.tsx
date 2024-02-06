@@ -194,7 +194,7 @@ export default function App() {
 
                 <Stack.Screen name='MedicationPage' component={MedicationPage} options={{
                   title: 'Medication',
-                  headerBackTitleVisible: false
+                  headerBackTitleVisible: false,
                 }} />
               </Stack.Group>
             ) : (

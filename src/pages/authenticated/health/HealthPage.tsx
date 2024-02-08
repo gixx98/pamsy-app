@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { neutral, primary } from '../../../assets/style/colors'
 import WeightIcon from '../../../assets/icons/weight-scale.svg'
@@ -12,6 +12,7 @@ import { db } from '../../../services/config'
 import Animated, { withSpring } from 'react-native-reanimated'
 import { useSharedValue } from 'react-native-reanimated';
 import Button from '../../../components/basic/Button'
+import Section from '../../../components/basic/Section'
 
 
 const HealthPage = ({ navigation, params }: any) => {
@@ -65,9 +66,33 @@ const HealthPage = ({ navigation, params }: any) => {
 				</TouchableOpacity>
 			</View>
 
-			{/* 
-			Animation tried out
-			<Animated.View
+			<Section title='Current nutrition' children={
+				<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+					<View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+						<Image source={require('../../../assets/images/JK9-LOGO.jpg')} style={{ width: 40, height: 40, borderRadius: 10 }} />
+						<View>
+							<Text style={[body.x10, { color: neutral.s400 }]}>Julius K9</Text>
+							<Text style={[body.x20, { color: neutral.s800 }]}>Lamb and rice</Text>
+						</View>
+					</View>
+					<Text style={[body.x20, { color: neutral.s400 }]}>150g/day</Text>
+				</View>
+			} />
+
+			<Section title='Appointments' children={
+				<>
+
+				</>
+			} />
+
+			<Section title='Health article' children={
+				<>
+
+				</>
+			} />
+
+			{/* Animation tried out */}
+			{/* <Animated.View
 				style={{
 					width,
 					height: 32,

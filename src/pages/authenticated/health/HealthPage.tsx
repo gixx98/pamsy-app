@@ -7,18 +7,64 @@ import EyeIcon from '../../../assets/icons/eye.svg'
 import StethoscopeIcon from '../../../assets/icons/stethoscope.svg'
 import { body, subheader } from '../../../assets/style/typography'
 import { usePetContext } from '../../../context/PetContext'
-import { collection, onSnapshot, query, where } from 'firebase/firestore'
+import { Timestamp, collection, getDocs, onSnapshot, orderBy, query, where } from 'firebase/firestore'
 import { db } from '../../../services/config'
 import Animated, { withSpring } from 'react-native-reanimated'
 import { useSharedValue } from 'react-native-reanimated';
 import Button from '../../../components/basic/Button'
 import Section from '../../../components/basic/Section'
+import AppointmentItem from './components/AppointmentItem'
 
+export interface Event {
+	id?: string,
+	category: string;
+	name: string;
+	createdAt: Timestamp;
+	notes: string;
+	value?: number;
+	unitOfMeasure?: string;
+	dosage?: number;
+	dateOfEvent?: Date;
+}
 
 const HealthPage = ({ navigation, params }: any) => {
+	const [vetAppointments, setVetAppointments] = useState<Event[]>([]); // Assuming 'Event' interface is defined elsewhere
+	const [loading, setLoading] = useState(true);
+
+	const { petId } = usePetContext();
+
+	useEffect(() => {
+		fetchVetAppointments();
+	}, []); // Empty dependency array to run only once on component mount
+
 	const width = useSharedValue(100);
 	const handlePress = () => {
 		width.value = withSpring(width.value + 50);
+	};
+
+	const fetchVetAppointments = async () => {
+		try {
+			const appointmentsRef = collection(db, `pets/${petId}/events`);
+			const q = query(appointmentsRef, where('category', '==', 'Vet appointment'), orderBy('createdAt', 'asc'));
+
+			const unsubscribe = onSnapshot(q, (querySnapshot) => {
+				const appointmentsArray = querySnapshot.docs.map((doc) => ({
+					id: doc.id,
+					name: doc.data().name,
+					category: doc.data().category,
+					notes: doc.data().notes,
+					createdAt: doc.data().createdAt,
+					...doc.data(),
+				}));
+				console.log(appointmentsArray);
+				setVetAppointments(appointmentsArray);
+				setLoading(false);
+			})
+
+			return () => unsubscribe();
+		} catch (error) {
+			console.error("Error fetching vet appointments:", error);
+		}
 	};
 
 	return (
@@ -40,16 +86,6 @@ const HealthPage = ({ navigation, params }: any) => {
 						<View style={styles.entryLeftContainer}>
 							<EyeIcon width={24} height={24} color={primary.s600} />
 							<Text style={[body.x20, { color: neutral.s800 }]}>Observations</Text>
-						</View>
-						<RightArrowIcon color={primary.s600} />
-					</View>
-				</TouchableOpacity>
-
-				<TouchableOpacity onPress={() => navigation.navigate("VetAppointments")}>
-					<View style={[styles.entryContainer]}>
-						<View style={styles.entryLeftContainer}>
-							<StethoscopeIcon width={24} height={24} color={primary.s600} />
-							<Text style={[body.x20, { color: neutral.s800 }]}>Vet appointments</Text>
 						</View>
 						<RightArrowIcon color={primary.s600} />
 					</View>
@@ -79,16 +115,45 @@ const HealthPage = ({ navigation, params }: any) => {
 				</View>
 			} />
 
-			<Section title='Appointments' children={
-				<>
-
-				</>
+			<Section title='Upcoming appointments' children={
+				<View style={{gap: 8}}>
+					{vetAppointments.length > 0 ? (
+						vetAppointments.map((appointment) => (
+							<AppointmentItem key={appointment.id} // Use ID for unique keys
+								date={appointment.createdAt}
+								reason={appointment.name}
+							/>
+						))
+					) : loading ? (
+						<Text>Loading...</Text>
+					) : (
+						<Text>No vet appointments found.</Text>
+					)}
+				</View>
 			} />
 
-			<Section title='Health article' children={
-				<>
+			<Section title='Health articles' children={
+				<View style={{ gap: 8 }}>
+					<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
+						<View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, width: '100%' }}>
+							<Image source={require('../../../assets/images/article_1.png')} style={{ width: 40, height: 40, borderRadius: 10 }} />
+							<View style={{ flexShrink: 1 }}>
+								<Text style={[body.x10, { color: neutral.s400 }]}>Care • Health</Text>
+								<Text numberOfLines={1} style={[body.x20, { color: neutral.s800 }]}>Understanding pet behavior: What is your pet trying to tell you?</Text>
+							</View>
+						</View>
+					</View>
 
-				</>
+					<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
+						<View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, width: '100%' }}>
+							<Image source={require('../../../assets/images/article_2.png')} style={{ width: 40, height: 40, borderRadius: 10 }} />
+							<View style={{ flexShrink: 1 }}>
+								<Text style={[body.x10, { color: neutral.s400 }]}>Behavior • Communication</Text>
+								<Text numberOfLines={1} style={[body.x20, { color: neutral.s800 }]}>10 essential tips to keep your pet happy and healthy</Text>
+							</View>
+						</View>
+					</View>
+				</View>
 			} />
 
 			{/* Animation tried out */}
@@ -109,7 +174,7 @@ export default HealthPage
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: primary.backgroundColor,
-		height: '100%'
+		height: '100%',
 	},
 
 	navigationContainer: {

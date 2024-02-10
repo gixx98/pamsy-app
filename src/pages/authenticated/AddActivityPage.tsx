@@ -108,6 +108,13 @@ const AddActivityPage = ({ route, navigation }: any) => {
       }
     }
 
+    if (category == 'Vet appointment') {
+      eventData = {
+        ...eventData,
+        dateOfEvent: date
+      }
+    }
+
     if (category == 'Walk' || category == 'Training' || category == 'Playtime') {
       eventData = {
         ...eventData,
@@ -149,11 +156,11 @@ const AddActivityPage = ({ route, navigation }: any) => {
 
   }
 
-  useEffect((): any => {
-    if (category == 'Weight') {
-      setName('Logged weight')
-    }
-  }, [])
+  // useEffect((): any => {
+  //   if (category == 'Weight') {
+  //     setName('Logged weight')
+  //   }
+  // }, [])
 
   useEffect((): any => {
     const fetchData = async () => {
@@ -343,9 +350,9 @@ const AddActivityPage = ({ route, navigation }: any) => {
               <Text style={[subheader.x10, { color: neutral.s800 }]}>Value</Text>
               <TextInput
                 placeholder='Enter a value'
-                value={value}
+                value={name}
                 style={componentStyle.textInput}
-                onChangeText={setValue}
+                onChangeText={setName}
                 keyboardType={Platform.OS == 'android' ? "numeric" : "decimal-pad"} />
 
             </View>

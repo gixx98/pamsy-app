@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     gap: 12,
-    marginHorizontal: 16,
+    // marginHorizontal: 16,
   },
 
   profilePicture: {
@@ -85,6 +85,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     gap: 12,
-    borderRadius: 12
   }
 })

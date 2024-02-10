@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         marginBottom: 8,
-        height: 44
-        // paddingHorizontal: 16,
+        height: 44,
+        paddingHorizontal: 16
     },
 
     leftContainer: {

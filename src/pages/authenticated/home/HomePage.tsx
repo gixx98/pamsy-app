@@ -1,5 +1,5 @@
 import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, Image, View, ActivityIndicator } from 'react-native'
-import React, { createContext, useEffect, useState } from 'react'
+import React, { createContext, useEffect, useRef, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigation } from '../../../App';
 import Header from '../../../components/Header';
@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../../../components/basic/Button';
 import { usePetContext } from '../../../context/PetContext';
 import { endOfDay, startOfDay } from 'date-fns';
+import Section from '../../../components/basic/Section';
 
 const mockupReminders = [
   {
@@ -58,12 +59,15 @@ const mockupReminders = [
   // Add more reminders as needed
 ];
 
+
 interface PetContextType {
   petIdd: string | null;
 }
 export const PetContext = createContext<PetContextType | undefined>(undefined);
 
 const HomePage = ({ navigation, route }: any) => {
+
+
   const { setPetId } = usePetContext();
   const { navigate } = useNavigation<StackNavigation>();
   const [loading, setLoading] = useState(true);
@@ -117,18 +121,12 @@ const HomePage = ({ navigation, route }: any) => {
       <SafeAreaView style={styles.container}>
         <Header navigation={navigation} />
 
-        {/* <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollViewContainer}> */}
-
-        <View style={styles.welcomeContainer}>
-          <Text style={[subheader.x30, { color: neutral.s600 }]}>Reminders</Text>
-        </View>
-
-        <View style={[styles.reminderContainer]}>
+        <Section title='Reminders' children={
           <Reminders reminders={mockupReminders} />
-        </View>
+        } />
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-          <Text style={[subheader.x30, { color: neutral.s600 }]}>Recet health activity</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, paddingHorizontal: 16 }}>
+          <Text style={[subheader.x30, { color: neutral.s600, marginTop: 12 }]}>Recet health activity</Text>
           <Text style={[body.x20, { color: neutral.s400 }]}>{formattedDate}</Text>
         </View>
 
@@ -145,17 +143,19 @@ const HomePage = ({ navigation, route }: any) => {
             <Button onPress={() => navigate("CreateNew")} title='Add activity' />
           </View>
           :
-          <FlatList
-            data={events}
-            renderItem={({ item }: any) => (
-              <View style={{ alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-                <Event id={item.key} name={item.name} category={item.category} notes={item.notes} date={item.date} value={item.value} unitOfMeasure={item.unitOfMeasure} />
-              </View>
-            )}
-            style={{ height: '100%' }}
-            keyExtractor={(item: any) => item.key}
-          />}
-
+          <View style={{ paddingHorizontal: 16 }}>
+            <FlatList
+              data={events}
+              renderItem={({ item }: any) => (
+                <View style={{ alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+                  <Event id={item.key} name={item.name} category={item.category} notes={item.notes} date={item.date} value={item.value} unitOfMeasure={item.unitOfMeasure} />
+                </View>
+              )}
+              style={{ height: '100%' }}
+              keyExtractor={(item: any) => item.key}
+            />
+          </View>
+        }
       </SafeAreaView>
     </PetContext.Provider>
   )
@@ -166,8 +166,7 @@ export default HomePage
 const styles = StyleSheet.create({
   container: {
     backgroundColor: primary.backgroundColor,
-    paddingHorizontal: 16,
-    height: '100%'
+    height: '100%',
   },
 
   welcomeContainer: {

@@ -49,10 +49,11 @@ export const getPetId = async (): Promise<string> => {
   return id;
 };
 
-interface Event {
+export interface Event {
+  id?: string,
   category: string;
   name: string;
-  createdAt?: Date;
+  createdAt: Date;
   notes: string;
   value?: number;
   unitOfMeasure?: string;
@@ -62,19 +63,16 @@ interface Event {
 
 export const addEventByPetId = async (petId: string, event: Event) => {
   const eventData: Event = {
-    category: event.category,
     name: event.name,
+    category: event.category,
     notes: event.notes,
-    createdAt: new Date(),
+    value: event.value,
+    createdAt: event.dateOfEvent ? event.dateOfEvent : new Date(),
   };
 
   if (event.category == "Medication") {
     eventData.dosage = event.dosage;
     eventData.unitOfMeasure = ""
-  } else if (event.category == "Vaccination") {
-    eventData.unitOfMeasure = "";
-  } else if (event.category == "Vet appointment") {
-    eventData.unitOfMeasure = "";
   } else if (event.category == "Observation") {
     eventData.unitOfMeasure = "";
   } else if (event.category == "Weight") {
@@ -88,14 +86,13 @@ export const addEventByPetId = async (petId: string, event: Event) => {
     eventData.value = event.value;
     eventData.unitOfMeasure = event.unitOfMeasure;
   }
-
+  console.log(eventData);
   await addDoc(collection(db, `pets/${petId}/events`), {
-    category: event.category,
-    name: event.name,
-    notes: event.notes,
-    createdAt: new Date(),
-    unitOfMeasure: event.unitOfMeasure,
-    value: event.value,
+    category: eventData.category,
+    name: eventData.name,
+    notes: eventData.notes,
+    createdAt: eventData.createdAt,
+    ...(eventData.unitOfMeasure && { unitOfMeasure: eventData.unitOfMeasure })
   });
 };
 

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Unchecked from '../assets/icons/check-circle.svg'
 import Checked from '../assets/icons/check_circle_checked.svg'
 import { body } from '../assets/style/typography';
-import { neutral } from '../assets/style/colors';
+import { neutral, primary } from '../assets/style/colors';
 
 interface Reminder {
     id: string;
@@ -45,7 +45,7 @@ const Reminders: React.FC<ReminderListProps> = ({ reminders }) => {
         <View style={[styles.container]}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                 <TouchableOpacity onPress={() => handleCheck(item.id)}>
-                    {item.isChecked ? <Checked /> : <Unchecked />}
+                    {item.isChecked ? <Checked color={primary.s600} /> : <Unchecked color={primary.s600} />}
 
                 </TouchableOpacity>
                 <View style={{}}>
@@ -76,8 +76,8 @@ export default Reminders
 
 const styles = StyleSheet.create({
     container: {
-        padding: 12,
         flexDirection: 'row',
+        paddingVertical: 8,
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#FFF',

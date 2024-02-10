@@ -133,15 +133,13 @@ export default EventDetailsPage
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F3F2F7',
+        backgroundColor: primary.backgroundColor,
         gap: 12
     },
 
     detailsContainer: {
-        marginHorizontal: 16,
         gap: 4,
         backgroundColor: '#FFF',
-        borderRadius: 12,
         borderWidth: 1,
         borderColor: neutral.s100
     },
